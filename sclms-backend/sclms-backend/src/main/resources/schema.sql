@@ -1,0 +1,172 @@
+-- MySQL Schema for SCLMS Database
+-- This file is automatically executed by Spring Boot during application startup
+
+-- Create database if it doesn't exist
+CREATE DATABASE IF NOT EXISTS sclms_db;
+USE sclms_db;
+
+-- Users table
+CREATE TABLE IF NOT EXISTS users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL DEFAULT 'USER',
+    status VARCHAR(50) NOT NULL DEFAULT 'PENDING',
+    organization VARCHAR(255),
+    two_factor_enabled BOOLEAN DEFAULT FALSE,
+    two_factor_secret VARCHAR(255),
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    force_password_reset BOOLEAN DEFAULT FALSE
+);
+
+-- Contracts table
+CREATE TABLE IF NOT EXISTS contracts (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    status VARCHAR(50) NOT NULL DEFAULT 'DRAFT',
+    priority VARCHAR(50) DEFAULT 'MEDIUM',
+    contract_type VARCHAR(100),
+    value DECIMAL(15,2),
+    currency VARCHAR(10) DEFAULT 'USD',
+    start_date DATE,
+    end_date DATE,
+    created_by BIGINT,
+    assigned_to BIGINT,
+    organization VARCHAR(255),
+    file_path VARCHAR(500),
+    file_name VARCHAR(255),
+    file_size BIGINT,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (created_by) REFERENCES users(id),
+    FOREIGN KEY (assigned_to) REFERENCES users(id)
+);
+
+-- Contract Documents table
+CREATE TABLE IF NOT EXISTS contract_documents (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    contract_id BIGINT NOT NULL,
+    file_name VARCHAR(255) NOT NULL,
+    file_path VARCHAR(500) NOT NULL,
+    file_size BIGINT,
+    file_type VARCHAR(100),
+    uploaded_by BIGINT,
+    uploaded_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (contract_id) REFERENCES contracts(id) ON DELETE CASCADE,
+    FOREIGN KEY (uploaded_by) REFERENCES users(id)
+);
+
+-- Approval History table
+CREATE TABLE IF NOT EXISTS approval_history (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    contract_id BIGINT NOT NULL,
+    approved_by BIGINT NOT NULL,
+    action VARCHAR(50) NOT NULL, -- APPROVED, REJECTED, COMMENTED
+    comments TEXT,
+    approval_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (contract_id) REFERENCES contracts(id) ON DELETE CASCADE,
+    FOREIGN KEY (approved_by) REFERENCES users(id)
+);
+
+-- Notifications table
+CREATE TABLE IF NOT EXISTS notifications (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    contract_id BIGINT,
+    title VARCHAR(255) NOT NULL,
+    message TEXT,
+    type VARCHAR(50) DEFAULT 'INFO',
+    is_read BOOLEAN DEFAULT FALSE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (contract_id) REFERENCES contracts(id) ON DELETE CASCADE
+);
+
+-- Indexes for performance
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_role ON users(role);
+CREATE INDEX idx_users_status ON users(status);
+CREATE INDEX idx_contracts_status ON contracts(status);
+CREATE INDEX idx_contracts_created_by ON contracts(created_by);
+CREATE INDEX idx_contracts_assigned_to ON contracts(assigned_to);
+CREATE INDEX idx_notifications_user_id ON notifications(user_id);
+CREATE INDEX idx_notifications_read_status ON notifications(read_status);
+
+-- System Settings table (singleton pattern - only one row)
+CREATE TABLE IF NOT EXISTS system_settings (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    -- General Settings
+    organization_name VARCHAR(255) DEFAULT 'SCLMS Corporation',
+    organization_logo VARCHAR(500),
+    contact_email VARCHAR(255) DEFAULT 'admin@sclms.com',
+    support_link VARCHAR(500) DEFAULT 'https://sclms.com/support',
+    timezone VARCHAR(50) DEFAULT 'UTC+5:30',
+
+    -- Security Settings
+    password_min_length INT DEFAULT 8,
+    password_require_uppercase BOOLEAN DEFAULT TRUE,
+    password_require_numbers BOOLEAN DEFAULT TRUE,
+    password_require_special_chars BOOLEAN DEFAULT FALSE,
+    password_expiry_days INT DEFAULT 90,
+    session_timeout INT DEFAULT 30,
+    max_login_attempts INT DEFAULT 5,
+    account_lockout_duration INT DEFAULT 15,
+    two_factor_enabled BOOLEAN DEFAULT FALSE,
+
+    -- Email Settings
+    smtp_host VARCHAR(255) DEFAULT 'smtp.gmail.com',
+    smtp_port INT DEFAULT 587,
+    smtp_username VARCHAR(255),
+    smtp_password VARCHAR(255),
+    smtp_encryption VARCHAR(10) DEFAULT 'tls',
+    email_from_address VARCHAR(255) DEFAULT 'noreply@sclms.com',
+    email_from_name VARCHAR(255) DEFAULT 'SCLMS System',
+
+    -- Notification Settings
+    system_alerts_enabled BOOLEAN DEFAULT TRUE,
+    admin_notifications_enabled BOOLEAN DEFAULT TRUE,
+    email_notifications_enabled BOOLEAN DEFAULT TRUE,
+    in_app_notifications_enabled BOOLEAN DEFAULT TRUE,
+
+    -- Database Settings
+    backup_frequency VARCHAR(20) DEFAULT 'daily',
+    backup_retention_days INT DEFAULT 30,
+    cleanup_retention_days INT DEFAULT 90,
+    maintenance_mode_enabled BOOLEAN DEFAULT FALSE,
+    auto_optimize_enabled BOOLEAN DEFAULT TRUE,
+    maintenance_window VARCHAR(10) DEFAULT '02:00',
+    max_connections INT DEFAULT 100,
+
+    -- User Management Settings
+    default_user_role VARCHAR(20) DEFAULT 'USER',
+    user_auto_approval_enabled BOOLEAN DEFAULT FALSE,
+    require_email_verification BOOLEAN DEFAULT TRUE,
+    allow_registration BOOLEAN DEFAULT TRUE,
+    max_users_per_org INT DEFAULT 100,
+    onboarding_enabled BOOLEAN DEFAULT TRUE,
+
+    -- API Settings
+    api_base_url VARCHAR(500) DEFAULT 'http://localhost:8082/api',
+    api_rate_limit INT DEFAULT 1000,
+    api_timeout INT DEFAULT 30,
+    cors_enabled BOOLEAN DEFAULT TRUE,
+    api_logging_enabled BOOLEAN DEFAULT TRUE,
+    webhook_enabled BOOLEAN DEFAULT FALSE,
+
+    -- Metadata
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_by BIGINT,
+
+    FOREIGN KEY (updated_by) REFERENCES users(id)
+);
+
+-- Create default admin user (optional - for initial setup)
+-- Password: admin123 (hashed)
+-- INSERT INTO users (name, email, password, role, status, organization) VALUES
+-- ('System Admin', 'admin@sclms.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'ADMIN', 'APPROVED', 'SCLMS')
+-- ON DUPLICATE KEY UPDATE id=id;

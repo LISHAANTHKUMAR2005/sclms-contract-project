@@ -1,0 +1,16 @@
+# Backend
+target/
+uploads/
+.mvn/
+.idea/
+
+# Frontend
+node_modules/
+dist/
+build/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
