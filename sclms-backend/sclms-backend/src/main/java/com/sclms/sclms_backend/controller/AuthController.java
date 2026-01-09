@@ -167,8 +167,8 @@ public class AuthController {
                 pendingContract.setContractType("SERVICE");
                 pendingContract.setFromOrg("TechCorp");
                 pendingContract.setToOrg("SCLMS");
-                pendingContract.setStartDate("2026-02-01");
-                pendingContract.setEndDate("2026-12-31");
+                pendingContract.setStartDate(LocalDateTime.parse("2026-02-01T00:00:00"));
+                pendingContract.setEndDate(LocalDateTime.parse("2026-12-31T23:59:59"));
                 pendingContract.setStatus("PENDING");
                 pendingContract.setCreatedDate(LocalDateTime.now().minusDays(2));
                 pendingContract.setCreatedBy(user.getId());
@@ -182,8 +182,8 @@ public class AuthController {
                 approvedContract.setContractType("MAINTENANCE");
                 approvedContract.setFromOrg("TechCorp");
                 approvedContract.setToOrg("SCLMS");
-                approvedContract.setStartDate("2026-01-15");
-                approvedContract.setEndDate("2026-12-31");
+                approvedContract.setStartDate(LocalDateTime.parse("2026-01-15T00:00:00"));
+                approvedContract.setEndDate(LocalDateTime.parse("2026-12-31T23:59:59"));
                 approvedContract.setStatus("APPROVED");
                 approvedContract.setCreatedDate(LocalDateTime.now().minusDays(5));
                 approvedContract.setApprovedDate(LocalDateTime.now().minusDays(3));
@@ -200,8 +200,8 @@ public class AuthController {
                 rejectedContract.setContractType("SERVICE");
                 rejectedContract.setFromOrg("TechCorp");
                 rejectedContract.setToOrg("SCLMS");
-                rejectedContract.setStartDate("2026-03-01");
-                rejectedContract.setEndDate("2026-08-31");
+                rejectedContract.setStartDate(LocalDateTime.parse("2026-03-01T00:00:00"));
+                rejectedContract.setEndDate(LocalDateTime.parse("2026-08-31T23:59:59"));
                 rejectedContract.setStatus("REJECTED");
                 rejectedContract.setCreatedDate(LocalDateTime.now().minusDays(1));
                 rejectedContract.setApprovedDate(LocalDateTime.now().minusHours(12));

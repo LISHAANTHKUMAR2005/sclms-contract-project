@@ -1,5 +1,6 @@
 package com.sclms.sclms_backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,10 +34,12 @@ public class Contract {
     private String toOrg;
 
     @Column(nullable = false)
-    private String startDate;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime startDate;
 
     @Column(nullable = false)
-    private String endDate;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime endDate;
 
     @Column(nullable = false)
     private String status; // PENDING, APPROVED, REJECTED, ACTIVE, EXPIRED
@@ -96,11 +99,11 @@ public class Contract {
     public String getToOrg() { return toOrg; }
     public void setToOrg(String toOrg) { this.toOrg = toOrg; }
 
-    public String getStartDate() { return startDate; }
-    public void setStartDate(String startDate) { this.startDate = startDate; }
+    public LocalDateTime getStartDate() { return startDate; }
+    public void setStartDate(LocalDateTime startDate) { this.startDate = startDate; }
 
-    public String getEndDate() { return endDate; }
-    public void setEndDate(String endDate) { this.endDate = endDate; }
+    public LocalDateTime getEndDate() { return endDate; }
+    public void setEndDate(LocalDateTime endDate) { this.endDate = endDate; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }

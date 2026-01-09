@@ -74,8 +74,8 @@ public class ContractController {
             contract.setFromOrg(user.getOrganization());
             contract.setToOrg(request.getToOrg());
             contract.setContractType(request.getContractType());
-            contract.setStartDate(request.getStartDate());
-            contract.setEndDate(request.getEndDate());
+            contract.setStartDate(LocalDateTime.parse(request.getStartDate() + "T00:00:00"));
+            contract.setEndDate(LocalDateTime.parse(request.getEndDate() + "T23:59:59"));
             contract.setDescription(request.getDescription());
             contract.setCreatedBy(user.getId());
             contract.setStatus("PENDING");
