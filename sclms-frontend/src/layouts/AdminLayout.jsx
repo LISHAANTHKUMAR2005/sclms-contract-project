@@ -3,10 +3,11 @@ import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import {
   FiHome, FiCheckCircle, FiUsers,
-  FiLogOut, FiMoon, FiSun, FiMenu,
+  FiLogOut, FiMenu,
   FiUser, FiChevronDown, FiSettings, FiShield
 } from "react-icons/fi";
 import AdminNotificationBell from "../components/AdminNotificationBell";
+import ThemeToggle from "../components/ThemeToggle";
 
 import "../styles/admin.css";
 
@@ -19,18 +20,7 @@ export default function AdminLayout() {
     return localStorage.getItem('admin-sidebar-collapsed') === 'true';
   });
 
-  const [darkMode, setDarkMode] = useState(() => {
-    // Check for saved theme preference
-    return localStorage.getItem('admin-theme') === 'dark';
-  });
-
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-
-  useEffect(() => {
-    // Apply theme to document
-    document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
-    localStorage.setItem('admin-theme', darkMode ? 'dark' : 'light');
-  }, [darkMode]);
 
   useEffect(() => {
     // Save sidebar state
@@ -39,10 +29,6 @@ export default function AdminLayout() {
 
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
-  };
-
-  const toggleTheme = () => {
-    setDarkMode(!darkMode);
   };
 
   const handleLogout = () => {
@@ -104,15 +90,6 @@ export default function AdminLayout() {
         <div className="sidebar-footer">
           <div className="sidebar-footer-content">
             <button
-              className="footer-btn theme-btn"
-              onClick={toggleTheme}
-              title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
-            >
-              {darkMode ? <FiSun /> : <FiMoon />}
-              <span>{darkMode ? "Light" : "Dark"}</span>
-            </button>
-
-            <button
               className="footer-btn logout-btn"
               onClick={handleLogout}
               title="Logout"
@@ -139,6 +116,7 @@ export default function AdminLayout() {
           </div>
           <div className="navbar-user">
             <AdminNotificationBell />
+            <ThemeToggle />
             <div className="profile-dropdown">
               <button
                 className="profile-button"
