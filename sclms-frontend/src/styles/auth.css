@@ -147,12 +147,12 @@
 }
 
 /* =====================================================
-   PREMIUM TITLE - STEP 3: INPUT & TEXT FIXES
+   PREMIUM TITLE & SUBTITLE - STEP 2: REGISTER CARD REDESIGN
 ===================================================== */
 .auth-card h2 {
   font-size: 28px;
   font-weight: 700;
-  margin-bottom: 32px;
+  margin-bottom: 8px;
   color: var(--text-primary);
   letter-spacing: -0.025em;
   line-height: 1.2;
@@ -161,6 +161,91 @@
 [data-theme="dark"] .auth-card h2 {
   color: var(--text-primary);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.auth-subtitle {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+[data-theme="dark"] .auth-subtitle {
+  color: var(--text-muted);
+}
+
+/* =====================================================
+   ORGANIZATION TYPE SELECTION - STEP 1: FIX ROLE SELECTION
+===================================================== */
+.org-type-selection {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  letter-spacing: 0.025em;
+}
+
+[data-theme="dark"] .form-label {
+  color: var(--text-primary);
+}
+
+.org-type-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.org-type-btn {
+  padding: 14px 16px;
+  border: 2px solid var(--auth-input-border-light);
+  background: var(--auth-input-light);
+  color: var(--text-primary);
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  min-height: 48px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .org-type-btn {
+  background: var(--auth-input-dark);
+  border-color: var(--auth-input-border-dark);
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.org-type-btn:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.org-type-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+  transform: translateY(-1px);
+}
+
+.org-type-btn.active:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
 }
 
 /* =====================================================

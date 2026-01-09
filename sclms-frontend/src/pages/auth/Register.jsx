@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { api } from "../../utils/api";
+import ThemeToggle from "../../components/ThemeToggle";
 import "../../styles/auth.css";
-import logo from "../../assets/clm-log.jpeg";
 
 function Register() {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ function Register() {
     name: "",
     email: "",
     password: "",
-    role: "USER",
+    role: "USER", // Default to College (USER role)
     organization: "",
   });
 
@@ -20,6 +20,11 @@ function Register() {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  // Handle organization type selection
+  const handleOrgTypeChange = (orgType) => {
+    setForm({ ...form, role: orgType });
   };
 
   const handleRegister = async (e) => {
@@ -48,10 +53,15 @@ function Register() {
 
   return (
     <div className="auth-wrapper">
+      <ThemeToggle />
       <div className="auth-card">
-        <img src={logo} alt="CLM Logo" className="auth-logo" />
+        <div className="auth-logo-text">
+          <h1>CLM</h1>
+          <p>Contract Lifecycle Management</p>
+        </div>
 
         <h2>Create Account</h2>
+        <p className="auth-subtitle">Register to access SCLMS</p>
 
         {error && <p className="error">{error}</p>}
 
@@ -82,21 +92,38 @@ function Register() {
             required
           />
 
-          <select name="role" value={form.role} onChange={handleChange}>
-            <option value="USER">College</option>
-            <option value="APPROVER">Company</option>
-          </select>
+          {/* Organization Type Selection - Toggle Buttons */}
+          <div className="org-type-selection">
+            <label className="form-label">Organization Type</label>
+            <div className="org-type-buttons">
+              <button
+                type="button"
+                className={`org-type-btn ${form.role === 'USER' ? 'active' : ''}`}
+                onClick={() => handleOrgTypeChange('USER')}
+              >
+                🎓 College
+              </button>
+              <button
+                type="button"
+                className={`org-type-btn ${form.role === 'APPROVER' ? 'active' : ''}`}
+                onClick={() => handleOrgTypeChange('APPROVER')}
+              >
+                🏢 Company
+              </button>
+            </div>
+          </div>
 
+          {/* Dynamic Organization Input */}
           <input
             name="organization"
-            placeholder="College / Company Name"
+            placeholder={form.role === 'USER' ? 'College Name' : 'Company Name'}
             value={form.organization}
             onChange={handleChange}
             required
           />
 
           <button type="submit" disabled={loading}>
-            {loading ? "Registering..." : "Register"}
+            {loading ? "Creating Account..." : "Create Account"}
           </button>
         </form>
 
