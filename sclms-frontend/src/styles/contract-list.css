@@ -104,9 +104,9 @@
   text-transform: uppercase;
 }
 
-.stat-item.approved .stat-number { color: #16a34a; }
-.stat-item.pending .stat-number { color: #f59e0b; }
-.stat-item.rejected .stat-number { color: #dc2626; }
+.stat-item.approved .stat-number { color: var(--status-active); }
+.stat-item.pending .stat-number { color: var(--warning-color); }
+.stat-item.rejected .stat-number { color: var(--danger-color); }
 
 /* Controls Section */
 .contracts-controls {

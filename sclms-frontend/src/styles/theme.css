@@ -62,6 +62,20 @@
   --rejected-color: #dc3545;
   --active-color: #007bff;
 
+  /* Additional Theme Colors for Components */
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-secondary: linear-gradient(135deg, #2563eb, #1f3bb3);
+  --gradient-success: linear-gradient(135deg, #16a34a, #0f7a2f);
+  --text-dark: #1e293b;
+  --text-gray: #64748b;
+  --bg-light: #dbeafe;
+  --bg-light-secondary: #f8fafc;
+  --status-active: #10b981;
+  --status-inactive: #6b7280;
+  --error-bg: #fee2e2;
+  --error-text: #b91c1c;
+  --error-border: #fecaca;
+
   /* Shadow Colors */
   --shadow-color: rgba(0, 0, 0, 0.1);
   --shadow-hover: rgba(0, 0, 0, 0.15);
@@ -118,111 +132,125 @@
 
 /* ===== DARK THEME OVERRIDES ===== */
 [data-theme="dark"] {
-  /* Background Colors */
-  --bg-color: #121212;
-  --bg-secondary: #1e1e1e;
-  --bg-tertiary: #2a2a2a;
+  /* Background Colors - Professional Dark Theme */
+  --bg-color: #0f172a; /* Deep slate */
+  --bg-secondary: #1e293b; /* Lighter slate */
+  --bg-tertiary: #334155; /* Even lighter slate */
 
   /* Card & Surface Colors */
-  --card-bg: #1e1e1e;
-  --card-hover: #2a2a2a;
-  --card-border: #404040;
+  --card-bg: #1e293b; /* Dark blue-gray */
+  --card-hover: #334155; /* Lighter on hover */
+  --card-border: #475569; /* Subtle border */
 
-  /* Text Colors */
-  --text-primary: #ffffff;
-  --text-secondary: #b0b0b0;
-  --text-muted: #808080;
-  --text-inverse: #121212;
+  /* Text Colors - High contrast */
+  --text-primary: #f8fafc; /* Near white */
+  --text-secondary: #cbd5e1; /* Light gray */
+  --text-muted: #94a3b8; /* Muted gray */
+  --text-inverse: #0f172a; /* Dark background for inverted text */
 
   /* Border Colors */
-  --border-color: #404040;
-  --border-light: #333333;
-  --border-focus: #4dabf7;
+  --border-color: #475569; /* Medium gray */
+  --border-light: #64748b; /* Lighter gray */
+  --border-focus: #60a5fa; /* Bright blue focus */
 
-  /* Primary Colors (Slightly brighter for dark mode) */
-  --primary-color: #4dabf7;
-  --primary-hover: #339af0;
-  --primary-light: #1c7ed6;
-  --primary-text: #ffffff;
+  /* Primary Colors (Professional blue) */
+  --primary-color: #3b82f6; /* Clean blue */
+  --primary-hover: #2563eb; /* Darker blue on hover */
+  --primary-light: rgba(59, 130, 246, 0.15); /* Subtle blue background */
+  --primary-text: #ffffff; /* White text */
 
   /* Secondary Colors */
-  --secondary-color: #868e96;
-  --secondary-hover: #adb5bd;
-  --secondary-light: #343a40;
+  --secondary-color: #64748b;
+  --secondary-hover: #94a3b8;
+  --secondary-light: #374151;
 
   /* Success Colors */
-  --success-color: #40c057;
-  --success-light: #2b8a3e;
-  --success-text: #d3f9d8;
+  --success-color: #10b981; /* Emerald */
+  --success-light: rgba(16, 185, 129, 0.15);
+  --success-text: #f0fdf4;
 
   /* Danger Colors */
-  --danger-color: #fa5252;
-  --danger-light: #c92a2a;
-  --danger-text: #ffe3e3;
+  --danger-color: #ef4444; /* Red */
+  --danger-light: rgba(239, 68, 68, 0.15);
+  --danger-text: #fef2f2;
 
   /* Warning Colors */
-  --warning-color: #ffd43b;
-  --warning-light: #e67700;
-  --warning-text: #2c2c2c;
+  --warning-color: #f59e0b; /* Amber */
+  --warning-light: rgba(245, 158, 11, 0.15);
+  --warning-text: #1f2937;
 
   /* Info Colors */
-  --info-color: #339af0;
-  --info-light: #1971c2;
-  --info-text: #d0ebff;
+  --info-color: #06b6d4; /* Cyan */
+  --info-light: rgba(6, 182, 212, 0.15);
+  --info-text: #ecfeff;
 
   /* Status Colors */
-  --pending-color: #ffd43b;
-  --approved-color: #40c057;
-  --rejected-color: #fa5252;
-  --active-color: #4dabf7;
+  --pending-color: #f59e0b;
+  --approved-color: #10b981;
+  --rejected-color: #ef4444;
+  --active-color: #3b82f6;
 
-  /* Shadow Colors */
-  --shadow-color: rgba(0, 0, 0, 0.3);
-  --shadow-hover: rgba(0, 0, 0, 0.5);
+  /* Shadow Colors - Subtle for dark theme */
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --shadow-hover: rgba(0, 0, 0, 0.6);
 
-  /* Input Colors */
-  --input-bg: #2a2a2a;
-  --input-border: #555555;
-  --input-focus: #4dabf7;
-  --input-error: #fa5252;
+  /* Input Colors - High contrast */
+  --input-bg: #334155; /* Dark input background */
+  --input-border: #64748b; /* Visible border */
+  --input-focus: #60a5fa; /* Bright focus */
+  --input-error: #ef4444; /* Red error */
 
   /* Navbar Colors */
-  --navbar-bg: #1e1e1e;
-  --navbar-text: #ffffff;
-  --navbar-border: #404040;
+  --navbar-bg: #1e293b;
+  --navbar-text: #f8fafc;
+  --navbar-border: #475569;
 
   /* Sidebar Colors */
-  --sidebar-bg: #121212;
-  --sidebar-text: #ffffff;
-  --sidebar-hover: #2a2a2a;
-  --sidebar-active: #4dabf7;
+  --sidebar-bg: #0f172a;
+  --sidebar-text: #f8fafc;
+  --sidebar-hover: #334155;
+  --sidebar-active: #3b82f6;
   --sidebar-active-text: #ffffff;
 
   /* Table Colors */
-  --table-header-bg: #2a2a2a;
-  --table-header-text: #ffffff;
-  --table-border: #404040;
-  --table-hover: #333333;
-  --table-striped: #2a2a2a;
+  --table-header-bg: #334155;
+  --table-header-text: #f8fafc;
+  --table-border: #475569;
+  --table-hover: #374151;
+  --table-striped: #334155;
 
   /* Modal Colors */
-  --modal-bg: #1e1e1e;
-  --modal-overlay: rgba(0, 0, 0, 0.7);
-  --modal-border: #404040;
+  --modal-bg: #1e293b;
+  --modal-overlay: rgba(15, 23, 42, 0.8);
+  --modal-border: #475569;
 
-  /* Button Colors (Adjusted for dark theme) */
-  --btn-primary: #4dabf7;
-  --btn-primary-hover: #339af0;
-  --btn-secondary: #868e96;
-  --btn-secondary-hover: #adb5bd;
-  --btn-success: #40c057;
-  --btn-success-hover: #2b8a3e;
-  --btn-danger: #fa5252;
-  --btn-danger-hover: #c92a2a;
-  --btn-warning: #ffd43b;
-  --btn-warning-hover: #e67700;
-  --btn-info: #339af0;
-  --btn-info-hover: #1971c2;
+  /* Button Colors (Professional dark theme) */
+  --btn-primary: #3b82f6;
+  --btn-primary-hover: #2563eb;
+  --btn-secondary: #64748b;
+  --btn-secondary-hover: #94a3b8;
+  --btn-success: #10b981;
+  --btn-success-hover: #059669;
+  --btn-danger: #ef4444;
+  --btn-danger-hover: #dc2626;
+  --btn-warning: #f59e0b;
+  --btn-warning-hover: #d97706;
+  --btn-info: #06b6d4;
+  --btn-info-hover: #0891b2;
+
+  /* Additional Theme Colors for Components - Dark Theme */
+  --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+  --gradient-secondary: linear-gradient(135deg, #3b82f6, #2563eb);
+  --gradient-success: linear-gradient(135deg, #10b981, #059669);
+  --text-dark: #f8fafc;
+  --text-gray: #94a3b8;
+  --bg-light: rgba(59, 130, 246, 0.1);
+  --bg-light-secondary: #334155;
+  --status-active: #10b981;
+  --status-inactive: #64748b;
+  --error-bg: rgba(239, 68, 68, 0.1);
+  --error-text: #ef4444;
+  --error-border: rgba(239, 68, 68, 0.3);
 }
 
 /* ===== GLOBAL FONT FAMILY ===== */

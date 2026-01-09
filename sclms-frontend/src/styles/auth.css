@@ -193,21 +193,23 @@
    ERROR / SUCCESS
 ===================================================== */
 .error {
-  background: #fee2e2;
-  color: #dc2626;
+  background: var(--danger-light);
+  color: var(--danger-text);
   padding: 10px;
   border-radius: 8px;
   font-size: 14px;
   margin-bottom: 10px;
+  border: 1px solid var(--danger-color);
 }
 
 .success {
-  background: #ecfdf5;
-  color: #16a34a;
+  background: var(--success-light);
+  color: var(--success-text);
   padding: 10px;
   border-radius: 8px;
   font-size: 14px;
   margin-bottom: 10px;
+  border: 1px solid var(--success-color);
 }
 
 /* =====================================================

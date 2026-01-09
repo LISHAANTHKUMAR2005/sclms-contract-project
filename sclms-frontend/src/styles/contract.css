@@ -53,12 +53,12 @@ body.dark {
   color: var(--text);
   text-align: center;
   border: 1px solid var(--border);
-  background: linear-gradient(#ffffff,#f5f7ff);
+  background: var(--gradient-primary);
 }
 
 .wizard-step.active {
-  background: linear-gradient(135deg,#2563eb,#1f3bb3);
-  color: #ffffff;
+  background: var(--gradient-secondary);
+  color: var(--text-inverse);
   border: none;
   box-shadow: 0 14px 28px rgba(37,99,235,.28);
 }
@@ -184,8 +184,8 @@ body.dark {
   border-radius: 12px;
   border: none;
   font-weight: 900;
-  color: white;
-  background: linear-gradient(135deg,#2563eb,#1f3bb3);
+  color: var(--text-inverse);
+  background: var(--gradient-secondary);
 }
 
 .btn-approve {
@@ -193,8 +193,8 @@ body.dark {
   border-radius: 12px;
   border: none;
   font-weight: 900;
-  color: white;
-  background: linear-gradient(135deg,#16a34a,#0f7a2f);
+  color: var(--text-inverse);
+  background: var(--gradient-success);
 }
 
 /* =========================================================
