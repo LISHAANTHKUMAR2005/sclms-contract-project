@@ -135,6 +135,36 @@
 }
 
 /* =====================================================
+   ADMIN LOGIN SECTION
+===================================================== */
+.admin-login-section {
+  margin-top: 20px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.admin-login-btn {
+  margin-bottom: 8px !important;
+  background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+  font-size: 14px !important;
+  padding: 11px !important;
+}
+
+.admin-login-btn:hover {
+  box-shadow: 0 12px 30px rgba(220, 38, 38, 0.35) !important;
+}
+
+.admin-credentials {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* =====================================================
    LINKS
 ===================================================== */
 .auth-link {

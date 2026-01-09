@@ -68,6 +68,40 @@ function Login() {
     }
   };
 
+  const handleAdminLogin = async () => {
+    setLoading(true);
+
+    try {
+      debugAuth('Admin login attempt');
+
+      const response = await apiRequest("auth/login", {
+        method: "POST",
+        body: JSON.stringify({
+          email: "admin@sclms.com",
+          password: "admin123"
+        })
+      });
+
+      // Store token and user data
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("user", JSON.stringify(response.user));
+
+      // Update AuthContext with user data and token
+      login(response.user, response.token);
+
+      showToast("Admin login successful!", "success");
+
+      // Navigate to admin dashboard
+      navigate("/admin/dashboard");
+
+    } catch (error) {
+      console.error('❌ ADMIN LOGIN FAILED:', error);
+      showToast(error.message || "Admin login failed", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="auth-wrapper">
       <div className="auth-card">
@@ -99,6 +133,20 @@ function Login() {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+
+        <div className="admin-login-section">
+          <button
+            type="button"
+            onClick={handleAdminLogin}
+            disabled={loading}
+            className="admin-login-btn"
+          >
+            {loading ? "Logging in..." : "Login as Admin"}
+          </button>
+          <p className="admin-credentials">
+            Admin: admin@sclms.com / admin123
+          </p>
+        </div>
 
         <p className="auth-link">
           Don't have an account? <Link to="/register">Register</Link>
