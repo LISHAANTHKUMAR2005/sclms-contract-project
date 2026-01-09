@@ -19,6 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "https://sclms-contract-project.vercel.app", allowCredentials = "true")
 public class AuthController {
 
     private final UserRepository userRepository;
