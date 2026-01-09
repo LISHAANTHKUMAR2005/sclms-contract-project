@@ -28,18 +28,20 @@ public class GlobalCorsFilter implements Filter {
 
         String origin = req.getHeader("Origin");
 
+        // Allow ONLY the Vercel frontend origin
         if (ALLOWED_ORIGIN.equals(origin)) {
             res.setHeader("Access-Control-Allow-Origin", ALLOWED_ORIGIN);
             res.setHeader("Access-Control-Allow-Credentials", "true");
             res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS");
-            res.setHeader("Access-Control-Allow-Headers", "*");
+            res.setHeader("Access-Control-Allow-Headers", "Authorization,Content-Type,Accept,X-Requested-With");
             res.setHeader("Access-Control-Expose-Headers", "Authorization");
             res.setHeader("Access-Control-Max-Age", "3600");
         }
 
+        // CRITICAL: Handle OPTIONS preflight requests
         if ("OPTIONS".equalsIgnoreCase(req.getMethod())) {
             res.setStatus(HttpServletResponse.SC_OK);
-            return;
+            return; // DO NOT continue filter chain for OPTIONS
         }
 
         chain.doFilter(request, response);

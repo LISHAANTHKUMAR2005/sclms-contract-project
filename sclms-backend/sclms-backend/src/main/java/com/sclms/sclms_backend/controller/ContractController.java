@@ -24,7 +24,6 @@ import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/api/contracts")
-@CrossOrigin(origins = "http://localhost:5173")
 public class ContractController {
 
     private final ContractRepository contractRepository;
