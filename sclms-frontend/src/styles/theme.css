@@ -43,6 +43,30 @@
 
   /* Transitions */
   --transition: 0.2s ease;
+
+/* ===== AUTH PAGE THEME VARIABLES ===== */
+  /* Auth Background Gradients */
+  --auth-bg-light: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+  --auth-bg-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+
+  /* Auth Card Styles */
+  --auth-card-light: #ffffff;
+  --auth-card-dark: #1e293b;
+  --auth-card-shadow-light: 0 20px 40px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.06);
+  --auth-card-shadow-dark: 0 20px 40px rgba(0, 0, 0, 0.4), 0 8px 16px rgba(0, 0, 0, 0.3);
+
+  /* Auth Button Styles */
+  --auth-btn-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  --auth-btn-hover: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  --auth-btn-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+
+  /* Auth Input Styles */
+  --auth-input-light: #ffffff;
+  --auth-input-dark: #334155;
+  --auth-input-border-light: #e5e7eb;
+  --auth-input-border-dark: #475569;
+  --auth-input-focus-light: rgba(59, 130, 246, 0.1);
+  --auth-input-focus-dark: rgba(59, 130, 246, 0.2);
 }
 
 /* ===== DARK THEME ===== */

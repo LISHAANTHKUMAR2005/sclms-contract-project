@@ -106,10 +106,8 @@ function Login() {
 
   return (
     <div className="auth-wrapper">
+      <ThemeToggle />
       <div className="auth-card">
-        <div style={{ position: 'absolute', top: '20px', right: '20px' }}>
-          <ThemeToggle />
-        </div>
 
         <div className="auth-logo-text">
           <h1>CLM</h1>
