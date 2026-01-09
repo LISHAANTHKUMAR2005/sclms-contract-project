@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { api } from "../../utils/api";
+import { showSuccess } from "../../utils/toast";
 import ThemeToggle from "../../components/ThemeToggle";
 import "../../styles/auth.css";
 
@@ -34,14 +35,14 @@ function Register() {
 
     try {
       const response = await api.post("auth/register", form);
-      alert("Registration successful! Your account has been created and is pending admin approval. You will be able to login once approved.");
+      showSuccess("Registration successful! Your account has been created and is pending admin approval. You will be able to login once approved.");
       navigate("/login");
     } catch (err) {
       console.error("Registration error:", err);
 
       // Check if it's actually a success but treated as error
       if (err.message && err.message.includes("Registration successful")) {
-        alert("Registration successful! Your account has been created and is pending admin approval.");
+        showSuccess("Registration successful! Your account has been created and is pending admin approval.");
         navigate("/login");
       } else {
         setError(err.message || "Registration failed. Please try again.");

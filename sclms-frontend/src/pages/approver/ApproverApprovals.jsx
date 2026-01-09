@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { apiRequest } from "../../utils/api";
+import { showSuccess, showError } from "../../utils/toast";
 import { FiCheckCircle, FiXCircle, FiEye, FiClock, FiFileText, FiTrendingUp, FiRefreshCw, FiFilter } from "react-icons/fi";
 import "../../styles/approver-approvals.css";
 
@@ -91,10 +92,10 @@ function ApproverApprovals() {
       });
 
       await loadAllData();
-      alert("Contract approved successfully!");
+      showSuccess("Contract approved successfully!");
     } catch (error) {
       console.error("Error approving contract:", error);
-      alert("Failed to approve contract. Please try again.");
+      showError("Failed to approve contract. Please try again.");
     } finally {
       setActionLoading(null);
     }
@@ -114,10 +115,10 @@ function ApproverApprovals() {
       });
 
       await loadAllData();
-      alert("Contract rejected successfully!");
+      showSuccess("Contract rejected successfully!");
     } catch (error) {
       console.error("Error rejecting contract:", error);
-      alert("Failed to reject contract. Please try again.");
+      showError("Failed to reject contract. Please try again.");
     } finally {
       setActionLoading(null);
     }

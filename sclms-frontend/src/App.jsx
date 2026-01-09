@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ToastContainer from "./components/ToastContainer";
 
 /* AUTH */
 import Login from "./pages/auth/Login";
@@ -41,6 +42,7 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <ToastContainer />
         <Routes>
           {/* AUTH ROUTES - No protection needed */}
           <Route path="/" element={<Navigate to="/login" replace />} />

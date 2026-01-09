@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
 import { apiRequest } from "../../utils/api";
-import { showToast } from "../../utils/toast";
+import { showToast, showSuccess, showError } from "../../utils/toast";
 import { debugAuth } from "../../utils/debug";
 import ThemeToggle from "../../components/ThemeToggle";
 import "../../styles/auth.css";

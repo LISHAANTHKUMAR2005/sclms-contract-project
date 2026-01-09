@@ -67,6 +67,21 @@
   --auth-input-border-dark: #475569;
   --auth-input-focus-light: rgba(59, 130, 246, 0.1);
   --auth-input-focus-dark: rgba(59, 130, 246, 0.2);
+
+  /* Toast Notification Styles */
+  --toast-success-bg: #dcfce7;
+  --toast-success-text: #166534;
+  --toast-success-border: #bbf7d0;
+  --toast-error-bg: #fef2f2;
+  --toast-error-text: #991b1b;
+  --toast-error-border: #fecaca;
+  --toast-warning-bg: #fffbeb;
+  --toast-warning-text: #92400e;
+  --toast-warning-border: #fde68a;
+  --toast-info-bg: #eff6ff;
+  --toast-info-text: #1e40af;
+  --toast-info-border: #bfdbfe;
+  --toast-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
 /* ===== DARK THEME ===== */
@@ -110,6 +125,21 @@
 
   /* Transitions */
   --transition: 0.2s ease;
+
+  /* Dark Theme Toast Styles */
+  --toast-success-bg: rgba(16, 185, 129, 0.2);
+  --toast-success-text: #34d399;
+  --toast-success-border: rgba(16, 185, 129, 0.3);
+  --toast-error-bg: rgba(239, 68, 68, 0.2);
+  --toast-error-text: #f87171;
+  --toast-error-border: rgba(239, 68, 68, 0.3);
+  --toast-warning-bg: rgba(245, 158, 11, 0.2);
+  --toast-warning-text: #fbbf24;
+  --toast-warning-border: rgba(245, 158, 11, 0.3);
+  --toast-info-bg: rgba(59, 130, 246, 0.2);
+  --toast-info-text: #60a5fa;
+  --toast-info-border: rgba(59, 130, 246, 0.3);
+  --toast-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 /* ===== GLOBAL FONT FAMILY ===== */
