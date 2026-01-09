@@ -1,5 +1,6 @@
 package com.sclms.sclms_backend.controller;
 
+import com.sclms.sclms_backend.dto.RegisterRequest;
 import com.sclms.sclms_backend.entity.Contract;
 import com.sclms.sclms_backend.entity.User;
 import com.sclms.sclms_backend.repository.ContractRepository;
@@ -7,9 +8,12 @@ import com.sclms.sclms_backend.repository.UserRepository;
 import com.sclms.sclms_backend.security.JwtUtil;
 import com.sclms.sclms_backend.service.SecurityService;
 import com.sclms.sclms_backend.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import jakarta.annotation.PostConstruct;
 import java.time.LocalDateTime;
@@ -220,14 +224,33 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request, BindingResult bindingResult) {
         try {
-            // Set default values for registration BEFORE creating user
+            // Check for validation errors
+            if (bindingResult.hasErrors()) {
+                Map<String, String> errors = new HashMap<>();
+                for (FieldError error : bindingResult.getFieldErrors()) {
+                    errors.put(error.getField(), error.getDefaultMessage());
+                }
+                return ResponseEntity.badRequest().body(Map.of(
+                    "error", "Validation failed",
+                    "fieldErrors", errors
+                ));
+            }
+
+            // Create user entity from validated request
+            User user = new User();
+            user.setName(request.getName());
+            user.setEmail(request.getEmail());
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+            user.setOrganization(request.getOrganization());
+
+            // Set default values for registration
             user.setRole("USER");
             user.setStatus("PENDING");
             user.setCreatedDate(java.time.LocalDate.now().toString());
 
-            // Set default notification preferences BEFORE creating user
+            // Set default notification preferences
             user.setBrowserNotifications(true);
             user.setEmailNotifications(true);
             user.setSystemNotifications(true);
@@ -235,7 +258,7 @@ public class AuthController {
             user.setExpirationReminders(true);
             user.setTwoFactorEnabled(false);
 
-            // Set account security defaults BEFORE creating user
+            // Set account security defaults
             user.setAccountLocked(false);
             user.setLoginAttempts(0);
             user.setForcePasswordReset(false);
