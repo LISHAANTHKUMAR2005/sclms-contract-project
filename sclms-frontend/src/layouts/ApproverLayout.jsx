@@ -6,6 +6,7 @@ import {
   FiSettings, FiLogOut, FiMenu, FiChevronLeft,
   FiChevronDown, FiBell
 } from "react-icons/fi";
+import ThemeToggle from "../components/ThemeToggle";
 import "../styles/approver-layout.css";
 
 export default function ApproverLayout() {
@@ -215,6 +216,9 @@ export default function ApproverLayout() {
           </div>
 
           <div className="header-right-section">
+            {/* Theme Toggle */}
+            <ThemeToggle />
+
             {/* Notification Bell */}
             <div className="notification-container">
               <button

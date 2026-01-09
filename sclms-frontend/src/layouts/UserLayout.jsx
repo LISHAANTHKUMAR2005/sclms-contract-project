@@ -9,6 +9,7 @@ import {
   FiBarChart, FiMessageSquare
 } from "react-icons/fi";
 import NotificationBell from "../components/NotificationBell";
+import ThemeToggle from "../components/ThemeToggle";
 
 import "../styles/user-dashboard.css";
 
@@ -185,6 +186,8 @@ export default function UserLayout() {
             <div className="header-notifications">
               <NotificationBell />
             </div>
+
+            <ThemeToggle />
 
             <div className="header-user-menu-container" ref={userMenuRef}>
               <button
