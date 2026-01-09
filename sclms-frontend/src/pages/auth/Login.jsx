@@ -1,9 +1,11 @@
 import { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import { useTheme } from "../../context/ThemeContext";
 import { apiRequest } from "../../utils/api";
 import { showToast } from "../../utils/toast";
 import { debugAuth } from "../../utils/debug";
+import ThemeToggle from "../../components/ThemeToggle";
 import "../../styles/auth.css";
 // import logo from "../../assets/clm-log.jpeg";
 
@@ -105,6 +107,10 @@ function Login() {
   return (
     <div className="auth-wrapper">
       <div className="auth-card">
+        <div style={{ position: 'absolute', top: '20px', right: '20px' }}>
+          <ThemeToggle />
+        </div>
+
         <div className="auth-logo-text">
           <h1>CLM</h1>
           <p>Contract Lifecycle Management</p>
