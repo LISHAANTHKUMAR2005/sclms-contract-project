@@ -39,15 +39,6 @@ public class Notification {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    // Manual getter/setter for isRead to ensure Lombok compatibility
-    public boolean isRead() {
-        return isRead;
-    }
-
-    public void setIsRead(boolean isRead) {
-        this.isRead = isRead;
-    }
-
     // Optional: Link to user for easier queries
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
@@ -59,4 +50,29 @@ public class Notification {
     @JoinColumn(name = "contract_id", insertable = false, updatable = false)
     @JsonIgnore
     private Contract contract;
+
+    // Manual getters and setters for compilation compatibility
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Long getUserId() { return userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
+
+    public Long getContractId() { return contractId; }
+    public void setContractId(Long contractId) { this.contractId = contractId; }
+
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+
+    public String getMessage() { return message; }
+    public void setMessage(String message) { this.message = message; }
+
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
+
+    public boolean isRead() { return isRead; }
+    public void setIsRead(boolean isRead) { this.isRead = isRead; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

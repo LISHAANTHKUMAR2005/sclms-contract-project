@@ -182,4 +182,155 @@ public class SystemSettings {
     public void preUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+    // Manual getters and setters for compilation compatibility
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getOrganizationName() { return organizationName; }
+    public void setOrganizationName(String organizationName) { this.organizationName = organizationName; }
+
+    public String getSystemDescription() { return systemDescription; }
+    public void setSystemDescription(String systemDescription) { this.systemDescription = systemDescription; }
+
+    public String getOrganizationLogo() { return organizationLogo; }
+    public void setOrganizationLogo(String organizationLogo) { this.organizationLogo = organizationLogo; }
+
+    public String getContactEmail() { return contactEmail; }
+    public void setContactEmail(String contactEmail) { this.contactEmail = contactEmail; }
+
+    public String getSupportLink() { return supportLink; }
+    public void setSupportLink(String supportLink) { this.supportLink = supportLink; }
+
+    public String getDefaultLanguage() { return defaultLanguage; }
+    public void setDefaultLanguage(String defaultLanguage) { this.defaultLanguage = defaultLanguage; }
+
+    public String getTimezone() { return timezone; }
+    public void setTimezone(String timezone) { this.timezone = timezone; }
+
+    public Integer getPasswordMinLength() { return passwordMinLength; }
+    public void setPasswordMinLength(Integer passwordMinLength) { this.passwordMinLength = passwordMinLength; }
+
+    public Boolean getPasswordRequireUppercase() { return passwordRequireUppercase; }
+    public void setPasswordRequireUppercase(Boolean passwordRequireUppercase) { this.passwordRequireUppercase = passwordRequireUppercase; }
+
+    public Boolean getPasswordRequireNumbers() { return passwordRequireNumbers; }
+    public void setPasswordRequireNumbers(Boolean passwordRequireNumbers) { this.passwordRequireNumbers = passwordRequireNumbers; }
+
+    public Boolean getPasswordRequireSpecialChars() { return passwordRequireSpecialChars; }
+    public void setPasswordRequireSpecialChars(Boolean passwordRequireSpecialChars) { this.passwordRequireSpecialChars = passwordRequireSpecialChars; }
+
+    public Integer getPasswordExpiryDays() { return passwordExpiryDays; }
+    public void setPasswordExpiryDays(Integer passwordExpiryDays) { this.passwordExpiryDays = passwordExpiryDays; }
+
+    public Integer getSessionTimeout() { return sessionTimeout; }
+    public void setSessionTimeout(Integer sessionTimeout) { this.sessionTimeout = sessionTimeout; }
+
+    public Integer getMaxLoginAttempts() { return maxLoginAttempts; }
+    public void setMaxLoginAttempts(Integer maxLoginAttempts) { this.maxLoginAttempts = maxLoginAttempts; }
+
+    public Integer getAccountLockoutDuration() { return accountLockoutDuration; }
+    public void setAccountLockoutDuration(Integer accountLockoutDuration) { this.accountLockoutDuration = accountLockoutDuration; }
+
+    public Boolean getTwoFactorEnabled() { return twoFactorEnabled; }
+    public void setTwoFactorEnabled(Boolean twoFactorEnabled) { this.twoFactorEnabled = twoFactorEnabled; }
+
+    public String getSmtpHost() { return smtpHost; }
+    public void setSmtpHost(String smtpHost) { this.smtpHost = smtpHost; }
+
+    public Integer getSmtpPort() { return smtpPort; }
+    public void setSmtpPort(Integer smtpPort) { this.smtpPort = smtpPort; }
+
+    public String getSmtpUsername() { return smtpUsername; }
+    public void setSmtpUsername(String smtpUsername) { this.smtpUsername = smtpUsername; }
+
+    public String getSmtpPassword() { return smtpPassword; }
+    public void setSmtpPassword(String smtpPassword) { this.smtpPassword = smtpPassword; }
+
+    public String getSmtpEncryption() { return smtpEncryption; }
+    public void setSmtpEncryption(String smtpEncryption) { this.smtpEncryption = smtpEncryption; }
+
+    public String getEmailFromAddress() { return emailFromAddress; }
+    public void setEmailFromAddress(String emailFromAddress) { this.emailFromAddress = emailFromAddress; }
+
+    public String getEmailFromName() { return emailFromName; }
+    public void setEmailFromName(String emailFromName) { this.emailFromName = emailFromName; }
+
+    public Boolean getSystemAlertsEnabled() { return systemAlertsEnabled; }
+    public void setSystemAlertsEnabled(Boolean systemAlertsEnabled) { this.systemAlertsEnabled = systemAlertsEnabled; }
+
+    public Boolean getAdminNotificationsEnabled() { return adminNotificationsEnabled; }
+    public void setAdminNotificationsEnabled(Boolean adminNotificationsEnabled) { this.adminNotificationsEnabled = adminNotificationsEnabled; }
+
+    public Boolean getEmailNotificationsEnabled() { return emailNotificationsEnabled; }
+    public void setEmailNotificationsEnabled(Boolean emailNotificationsEnabled) { this.emailNotificationsEnabled = emailNotificationsEnabled; }
+
+    public Boolean getInAppNotificationsEnabled() { return inAppNotificationsEnabled; }
+    public void setInAppNotificationsEnabled(Boolean inAppNotificationsEnabled) { this.inAppNotificationsEnabled = inAppNotificationsEnabled; }
+
+    public String getBackupFrequency() { return backupFrequency; }
+    public void setBackupFrequency(String backupFrequency) { this.backupFrequency = backupFrequency; }
+
+    public Integer getBackupRetentionDays() { return backupRetentionDays; }
+    public void setBackupRetentionDays(Integer backupRetentionDays) { this.backupRetentionDays = backupRetentionDays; }
+
+    public Integer getCleanupRetentionDays() { return cleanupRetentionDays; }
+    public void setCleanupRetentionDays(Integer cleanupRetentionDays) { this.cleanupRetentionDays = cleanupRetentionDays; }
+
+    public Boolean getMaintenanceModeEnabled() { return maintenanceModeEnabled; }
+    public void setMaintenanceModeEnabled(Boolean maintenanceModeEnabled) { this.maintenanceModeEnabled = maintenanceModeEnabled; }
+
+    public Boolean getAutoOptimizeEnabled() { return autoOptimizeEnabled; }
+    public void setAutoOptimizeEnabled(Boolean autoOptimizeEnabled) { this.autoOptimizeEnabled = autoOptimizeEnabled; }
+
+    public String getMaintenanceWindow() { return maintenanceWindow; }
+    public void setMaintenanceWindow(String maintenanceWindow) { this.maintenanceWindow = maintenanceWindow; }
+
+    public Integer getMaxConnections() { return maxConnections; }
+    public void setMaxConnections(Integer maxConnections) { this.maxConnections = maxConnections; }
+
+    public String getDefaultUserRole() { return defaultUserRole; }
+    public void setDefaultUserRole(String defaultUserRole) { this.defaultUserRole = defaultUserRole; }
+
+    public Boolean getUserAutoApprovalEnabled() { return userAutoApprovalEnabled; }
+    public void setUserAutoApprovalEnabled(Boolean userAutoApprovalEnabled) { this.userAutoApprovalEnabled = userAutoApprovalEnabled; }
+
+    public Boolean getRequireEmailVerification() { return requireEmailVerification; }
+    public void setRequireEmailVerification(Boolean requireEmailVerification) { this.requireEmailVerification = requireEmailVerification; }
+
+    public Boolean getAllowRegistration() { return allowRegistration; }
+    public void setAllowRegistration(Boolean allowRegistration) { this.allowRegistration = allowRegistration; }
+
+    public Integer getMaxUsersPerOrg() { return maxUsersPerOrg; }
+    public void setMaxUsersPerOrg(Integer maxUsersPerOrg) { this.maxUsersPerOrg = maxUsersPerOrg; }
+
+    public Boolean getOnboardingEnabled() { return onboardingEnabled; }
+    public void setOnboardingEnabled(Boolean onboardingEnabled) { this.onboardingEnabled = onboardingEnabled; }
+
+    public String getApiBaseUrl() { return apiBaseUrl; }
+    public void setApiBaseUrl(String apiBaseUrl) { this.apiBaseUrl = apiBaseUrl; }
+
+    public Integer getApiRateLimit() { return apiRateLimit; }
+    public void setApiRateLimit(Integer apiRateLimit) { this.apiRateLimit = apiRateLimit; }
+
+    public Integer getApiTimeout() { return apiTimeout; }
+    public void setApiTimeout(Integer apiTimeout) { this.apiTimeout = apiTimeout; }
+
+    public Boolean getCorsEnabled() { return corsEnabled; }
+    public void setCorsEnabled(Boolean corsEnabled) { this.corsEnabled = corsEnabled; }
+
+    public Boolean getApiLoggingEnabled() { return apiLoggingEnabled; }
+    public void setApiLoggingEnabled(Boolean apiLoggingEnabled) { this.apiLoggingEnabled = apiLoggingEnabled; }
+
+    public Boolean getWebhookEnabled() { return webhookEnabled; }
+    public void setWebhookEnabled(Boolean webhookEnabled) { this.webhookEnabled = webhookEnabled; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+    public Long getUpdatedBy() { return updatedBy; }
+    public void setUpdatedBy(Long updatedBy) { this.updatedBy = updatedBy; }
 }

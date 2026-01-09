@@ -1,9 +1,9 @@
 package com.sclms.sclms_backend.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,67 +12,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-
-    // Manually add getters/setters to ensure they are available
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
-
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
-
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
-
-    public String getOrganization() { return organization; }
-    public void setOrganization(String organization) { this.organization = organization; }
-
-    public String getCreatedDate() { return createdDate; }
-    public void setCreatedDate(String createdDate) { this.createdDate = createdDate; }
-
-    public Boolean getBrowserNotifications() { return browserNotifications; }
-    public void setBrowserNotifications(Boolean browserNotifications) { this.browserNotifications = browserNotifications; }
-
-    public Boolean getEmailNotifications() { return emailNotifications; }
-    public void setEmailNotifications(Boolean emailNotifications) { this.emailNotifications = emailNotifications; }
-
-    public Boolean getSystemNotifications() { return systemNotifications; }
-    public void setSystemNotifications(Boolean systemNotifications) { this.systemNotifications = systemNotifications; }
-
-    public Boolean getContractAlerts() { return contractAlerts; }
-    public void setContractAlerts(Boolean contractAlerts) { this.contractAlerts = contractAlerts; }
-
-    public Boolean getExpirationReminders() { return expirationReminders; }
-    public void setExpirationReminders(Boolean expirationReminders) { this.expirationReminders = expirationReminders; }
-
-    public Boolean getTwoFactorEnabled() { return twoFactorEnabled; }
-    public void setTwoFactorEnabled(Boolean twoFactorEnabled) { this.twoFactorEnabled = twoFactorEnabled; }
-
-    public String getTwoFactorSecret() { return twoFactorSecret; }
-    public void setTwoFactorSecret(String twoFactorSecret) { this.twoFactorSecret = twoFactorSecret; }
-
-    public LocalDateTime getLastPasswordChangedAt() { return lastPasswordChangedAt; }
-    public void setLastPasswordChangedAt(LocalDateTime lastPasswordChangedAt) { this.lastPasswordChangedAt = lastPasswordChangedAt; }
-
-    public Integer getLoginAttempts() { return loginAttempts; }
-    public void setLoginAttempts(Integer loginAttempts) { this.loginAttempts = loginAttempts; }
-
-    public Boolean getAccountLocked() { return accountLocked; }
-    public void setAccountLocked(Boolean accountLocked) { this.accountLocked = accountLocked; }
-
-    public LocalDateTime getLockoutUntil() { return lockoutUntil; }
-    public void setLockoutUntil(LocalDateTime lockoutUntil) { this.lockoutUntil = lockoutUntil; }
-
-    public LocalDateTime getLastFailedLoginAt() { return lastFailedLoginAt; }
-    public void setLastFailedLoginAt(LocalDateTime lastFailedLoginAt) { this.lastFailedLoginAt = lastFailedLoginAt; }
-
-    public Boolean getForcePasswordReset() { return forcePasswordReset; }
-    public void setForcePasswordReset(Boolean forcePasswordReset) { this.forcePasswordReset = forcePasswordReset; }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -159,4 +98,68 @@ public class User {
         }
         // 2FA fields already have defaults above
     }
+
+    // Manual getters and setters for Lombok compatibility
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    public String getOrganization() { return organization; }
+    public void setOrganization(String organization) { this.organization = organization; }
+
+    public String getCreatedDate() { return createdDate; }
+    public void setCreatedDate(String createdDate) { this.createdDate = createdDate; }
+
+    public Boolean getBrowserNotifications() { return browserNotifications; }
+    public void setBrowserNotifications(Boolean browserNotifications) { this.browserNotifications = browserNotifications; }
+
+    public Boolean getEmailNotifications() { return emailNotifications; }
+    public void setEmailNotifications(Boolean emailNotifications) { this.emailNotifications = emailNotifications; }
+
+    public Boolean getSystemNotifications() { return systemNotifications; }
+    public void setSystemNotifications(Boolean systemNotifications) { this.systemNotifications = systemNotifications; }
+
+    public Boolean getContractAlerts() { return contractAlerts; }
+    public void setContractAlerts(Boolean contractAlerts) { this.contractAlerts = contractAlerts; }
+
+    public Boolean getExpirationReminders() { return expirationReminders; }
+    public void setExpirationReminders(Boolean expirationReminders) { this.expirationReminders = expirationReminders; }
+
+    public Boolean getTwoFactorEnabled() { return twoFactorEnabled; }
+    public void setTwoFactorEnabled(Boolean twoFactorEnabled) { this.twoFactorEnabled = twoFactorEnabled; }
+
+    public String getTwoFactorSecret() { return twoFactorSecret; }
+    public void setTwoFactorSecret(String twoFactorSecret) { this.twoFactorSecret = twoFactorSecret; }
+
+    public LocalDateTime getLastPasswordChangedAt() { return lastPasswordChangedAt; }
+    public void setLastPasswordChangedAt(LocalDateTime lastPasswordChangedAt) { this.lastPasswordChangedAt = lastPasswordChangedAt; }
+
+    public Integer getLoginAttempts() { return loginAttempts; }
+    public void setLoginAttempts(Integer loginAttempts) { this.loginAttempts = loginAttempts; }
+
+    public Boolean getAccountLocked() { return accountLocked; }
+    public void setAccountLocked(Boolean accountLocked) { this.accountLocked = accountLocked; }
+
+    public LocalDateTime getLockoutUntil() { return lockoutUntil; }
+    public void setLockoutUntil(LocalDateTime lockoutUntil) { this.lockoutUntil = lockoutUntil; }
+
+    public LocalDateTime getLastFailedLoginAt() { return lastFailedLoginAt; }
+    public void setLastFailedLoginAt(LocalDateTime lastFailedLoginAt) { this.lastFailedLoginAt = lastFailedLoginAt; }
+
+    public Boolean getForcePasswordReset() { return forcePasswordReset; }
+    public void setForcePasswordReset(Boolean forcePasswordReset) { this.forcePasswordReset = forcePasswordReset; }
 }

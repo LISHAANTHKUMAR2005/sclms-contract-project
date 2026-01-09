@@ -41,4 +41,26 @@ public class ApprovalHistory {
     @JoinColumn(name = "contract_id", insertable = false, updatable = false)
     @JsonIgnore
     private Contract contract;
+
+    // Manual getters and setters for compilation compatibility
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Long getContractId() { return contractId; }
+    public void setContractId(Long contractId) { this.contractId = contractId; }
+
+    public String getAction() { return action; }
+    public void setAction(String action) { this.action = action; }
+
+    public String getActor() { return actor; }
+    public void setActor(String actor) { this.actor = actor; }
+
+    public String getActorRole() { return actorRole; }
+    public void setActorRole(String actorRole) { this.actorRole = actorRole; }
+
+    public String getComment() { return comment; }
+    public void setComment(String comment) { this.comment = comment; }
+
+    public LocalDateTime getTimestamp() { return timestamp; }
+    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
 }
