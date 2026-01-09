@@ -98,9 +98,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cfg = new CorsConfiguration();
         cfg.setAllowedOrigins(Arrays.asList(
-                "http://localhost:5173",
-                "http://localhost:5174",
-                "http://localhost:5175"
+                "https://sclms-contract-project.vercel.app"
         ));
         cfg.setAllowedMethods(Arrays.asList(
                 "GET","POST","PUT","DELETE","PATCH","OPTIONS"
@@ -119,4 +117,5 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+}
 }

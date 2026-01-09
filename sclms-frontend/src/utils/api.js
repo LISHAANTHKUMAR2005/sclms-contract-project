@@ -1,7 +1,7 @@
 import { createLogger } from "./logger";
 
 const logger = createLogger("API");
-const API_BASE_URL = "https://sclms-contract-project-production.up.railway.app/api/";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://sclms-contract-project-production.up.railway.app/api/";
 
 // Helper — read CSRF token from cookies (for non-admin endpoints only)
 const getCsrfToken = () => {
