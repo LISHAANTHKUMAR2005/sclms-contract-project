@@ -26,21 +26,21 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
+            // Disable CSRF (JWT based auth)
             .csrf(csrf -> csrf.disable())
-            .sessionManagement(s ->
-                s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+            // Stateless session
+            .sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
 
+            // Authorization rules
             .authorizeHttpRequests(auth -> auth
 
-                // =====================
-                // CORS PREFLIGHT OPTIONS
-                // =====================
+                // ✅ Allow CORS preflight
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                // =====================
-                // PUBLIC AUTH ENDPOINTS
-                // =====================
+                // ✅ Public auth APIs
                 .requestMatchers(
                         "/api/auth/login",
                         "/api/auth/register",
@@ -48,15 +48,10 @@ public class SecurityConfig {
                         "/api/admin/users/debug-auth"
                 ).permitAll()
 
-                // =====================
-                // PASSWORD CHANGE (AUTH)
-                // =====================
-                .requestMatchers("/api/auth/change-password")
-                    .authenticated()
+                // 🔐 Authenticated users
+                .requestMatchers("/api/auth/change-password").authenticated()
 
-                // =====================
-                // USER AREA
-                // =====================
+                // 👤 User / Approver / Admin
                 .requestMatchers(
                         "/api/contracts/my/**",
                         "/api/contracts/create/**",
@@ -64,31 +59,24 @@ public class SecurityConfig {
                         "/api/2fa/**",
                         "/api/contracts/file/**",
                         "/api/organizations/**"
-                ).hasAnyAuthority("ROLE_USER","ROLE_APPROVER","ROLE_ADMIN")
+                ).hasAnyAuthority("ROLE_USER", "ROLE_APPROVER", "ROLE_ADMIN")
 
-                // =====================
-                // APPROVER AREA
-                // =====================
+                // 👨‍⚖️ Approver + Admin
                 .requestMatchers(
                         "/api/contracts/approver/**",
                         "/api/contracts/activity/approver/**",
                         "/api/contracts/history/**",
                         "/api/users/**"
-                ).hasAnyAuthority("ROLE_APPROVER","ROLE_ADMIN")
+                ).hasAnyAuthority("ROLE_APPROVER", "ROLE_ADMIN")
 
-                // =====================
-                // ADMIN AREA
-                // =====================
-                .requestMatchers(
-                        "/api/admin/**"
-                ).hasAuthority("ROLE_ADMIN")
+                // 👑 Admin only
+                .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
 
-                // =====================
-                // DEFAULT RULE
-                // =====================
+                // 🔒 Everything else
                 .anyRequest().authenticated()
             )
 
+            // JWT filter
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -98,4 +86,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-}}
+}
