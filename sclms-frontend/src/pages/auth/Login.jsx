@@ -134,19 +134,6 @@ function Login() {
           </button>
         </form>
 
-        <div className="admin-login-section">
-          <button
-            type="button"
-            onClick={handleAdminLogin}
-            disabled={loading}
-            className="admin-login-btn"
-          >
-            {loading ? "Logging in..." : "Login as Admin"}
-          </button>
-          <p className="admin-credentials">
-            Admin: admin@sclms.com / admin123
-          </p>
-        </div>
 
         <p className="auth-link">
           Don't have an account? <Link to="/register">Register</Link>
