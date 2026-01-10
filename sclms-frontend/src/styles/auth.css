@@ -297,6 +297,77 @@
 }
 
 /* =====================================================
+   PASSWORD FIELD WITH TOGGLE
+===================================================== */
+.password-field {
+  position: relative;
+  width: 100%;
+}
+
+.password-field input {
+  width: 100%;
+  padding: 16px 50px 16px 18px;
+  border-radius: 12px;
+  border: 2px solid var(--auth-input-border-light);
+  font-size: 15px;
+  font-weight: 500;
+  background: var(--auth-input-light);
+  color: var(--text-primary);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Dark theme password input */
+[data-theme="dark"] .password-field input {
+  background: var(--auth-input-dark);
+  border-color: var(--auth-input-border-dark);
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text-secondary);
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  opacity: 0.7;
+}
+
+.toggle-password:hover {
+  opacity: 1;
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--primary);
+}
+
+[data-theme="dark"] .toggle-password:hover {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.toggle-password:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Focus state for password field */
+.password-field input:focus + .toggle-password,
+.password-field input:focus ~ .toggle-password {
+  opacity: 1;
+}
+
+/* =====================================================
    PREMIUM INPUTS & SELECT - STEP 3: INPUT & TEXT FIXES
 ===================================================== */
 .auth-card input,
@@ -608,6 +679,18 @@
   .auth-card select {
     padding: 14px 16px;
     font-size: 16px; /* Prevent zoom on iOS */
+  }
+
+  .password-field input {
+    padding: 14px 45px 14px 16px;
+    font-size: 16px;
+  }
+
+  .toggle-password {
+    right: 10px;
+    width: 22px;
+    height: 22px;
+    font-size: 16px;
   }
 
   .auth-card button {
