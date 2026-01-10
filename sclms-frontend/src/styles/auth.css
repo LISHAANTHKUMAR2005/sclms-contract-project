@@ -299,14 +299,14 @@
 /* =====================================================
    PASSWORD FIELD WITH TOGGLE
 ===================================================== */
-.password-field {
+.password-wrapper {
   position: relative;
   width: 100%;
 }
 
-.password-field input {
+.password-wrapper .auth-input {
   width: 100%;
-  padding: 16px 50px 16px 18px;
+  padding: 16px 44px 16px 18px;
   border-radius: 12px;
   border: 2px solid var(--auth-input-border-light);
   font-size: 15px;
@@ -318,53 +318,40 @@
 }
 
 /* Dark theme password input */
-[data-theme="dark"] .password-field input {
+[data-theme="dark"] .password-wrapper .auth-input {
   background: var(--auth-input-dark);
   border-color: var(--auth-input-border-dark);
   color: var(--text-primary);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.toggle-password {
+.password-toggle {
   position: absolute;
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  background: none;
+  background: transparent;
   border: none;
   cursor: pointer;
-  font-size: 18px;
-  color: var(--text-secondary);
-  padding: 4px;
-  border-radius: 4px;
-  transition: all 0.2s ease;
+  color: var(--text-muted);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  opacity: 0.7;
+  transition: all 0.2s ease;
 }
 
-.toggle-password:hover {
-  opacity: 1;
-  background: rgba(59, 130, 246, 0.1);
+.password-toggle:hover {
   color: var(--primary);
 }
 
-[data-theme="dark"] .toggle-password:hover {
-  background: rgba(59, 130, 246, 0.2);
-}
-
-.toggle-password:focus {
+.password-toggle:focus {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 
-/* Focus state for password field */
-.password-field input:focus + .toggle-password,
-.password-field input:focus ~ .toggle-password {
-  opacity: 1;
+.password-toggle svg {
+  width: 18px;
+  height: 18px;
 }
 
 /* =====================================================
