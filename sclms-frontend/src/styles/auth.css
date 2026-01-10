@@ -299,45 +299,28 @@
 /* =====================================================
    PASSWORD FIELD WITH TOGGLE
 ===================================================== */
-.password-wrapper {
+.input-group {
   position: relative;
   width: 100%;
 }
 
-.password-wrapper .auth-input {
-  width: 100%;
-  padding: 16px 44px 16px 18px;
-  border-radius: 12px;
-  border: 2px solid var(--auth-input-border-light);
-  font-size: 15px;
-  font-weight: 500;
-  background: var(--auth-input-light);
-  color: var(--text-primary);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-/* Dark theme password input */
-[data-theme="dark"] .password-wrapper .auth-input {
-  background: var(--auth-input-dark);
-  border-color: var(--auth-input-border-dark);
-  color: var(--text-primary);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+.password-group input {
+  padding-right: 48px; /* space for eye icon */
 }
 
 .password-toggle {
   position: absolute;
-  right: 12px;
+  right: 14px;
   top: 50%;
   transform: translateY(-50%);
   background: transparent;
   border: none;
   cursor: pointer;
   color: var(--text-muted);
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
 }
 
 .password-toggle:hover {
@@ -345,13 +328,7 @@
 }
 
 .password-toggle:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-
-.password-toggle svg {
-  width: 18px;
-  height: 18px;
+  outline: none;
 }
 
 /* =====================================================
@@ -668,16 +645,13 @@
     font-size: 16px; /* Prevent zoom on iOS */
   }
 
-  .password-field input {
-    padding: 14px 45px 14px 16px;
+  .password-group input {
+    padding-right: 48px;
     font-size: 16px;
   }
 
-  .toggle-password {
-    right: 10px;
-    width: 22px;
-    height: 22px;
-    font-size: 16px;
+  .password-toggle {
+    right: 12px;
   }
 
   .auth-card button {

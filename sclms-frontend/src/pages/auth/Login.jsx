@@ -126,7 +126,7 @@ function Login() {
             required
           />
 
-          <div className="password-wrapper">
+          <div className="input-group password-group">
             <input
               type={showPassword ? "text" : "password"}
               className="auth-input"
@@ -135,12 +135,12 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+
             <button
               type="button"
               className="password-toggle"
               onClick={() => setShowPassword(!showPassword)}
               aria-label="Toggle password visibility"
-              tabIndex={-1}
             >
               {showPassword ? (
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
