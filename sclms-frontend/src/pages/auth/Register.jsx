@@ -12,7 +12,7 @@ function Register() {
     name: "",
     email: "",
     password: "",
-    role: "USER", // Default to College (USER role)
+    role: "", // No default selection - user must choose
     organization: "",
   });
 
@@ -93,24 +93,36 @@ function Register() {
             required
           />
 
-          {/* Organization Type Selection - Toggle Buttons */}
+          {/* Organization Type Selection - Professional Cards */}
           <div className="org-type-selection">
             <label className="form-label">Organization Type</label>
-            <div className="org-type-buttons">
-              <button
-                type="button"
-                className={`org-type-btn ${form.role === 'USER' ? 'active' : ''}`}
+            <div className="org-type-cards">
+              <div
+                className={`organization-card ${form.role === 'USER' ? 'selected' : ''}`}
                 onClick={() => handleOrgTypeChange('USER')}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === 'Enter' && handleOrgTypeChange('USER')}
               >
-                🎓 College
-              </button>
-              <button
-                type="button"
-                className={`org-type-btn ${form.role === 'APPROVER' ? 'active' : ''}`}
+                <div className="card-icon">🎓</div>
+                <div className="card-content">
+                  <h3 className="card-title">College</h3>
+                  <p className="card-subtitle">Educational Institution</p>
+                </div>
+              </div>
+              <div
+                className={`organization-card ${form.role === 'APPROVER' ? 'selected' : ''}`}
                 onClick={() => handleOrgTypeChange('APPROVER')}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === 'Enter' && handleOrgTypeChange('APPROVER')}
               >
-                🏢 Company
-              </button>
+                <div className="card-icon">🏢</div>
+                <div className="card-content">
+                  <h3 className="card-title">Company</h3>
+                  <p className="card-subtitle">Business Organization</p>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -123,7 +135,7 @@ function Register() {
             required
           />
 
-          <button type="submit" disabled={loading}>
+          <button type="submit" disabled={loading || !form.role}>
             {loading ? "Creating Account..." : "Create Account"}
           </button>
         </form>
