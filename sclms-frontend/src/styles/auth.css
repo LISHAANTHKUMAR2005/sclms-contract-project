@@ -299,63 +299,36 @@
 /* =====================================================
    PASSWORD FIELD WITH TOGGLE
 ===================================================== */
-.input-group {
-  position: relative;
-  width: 100%;
-  display: flex;
-  align-items: center;
-}
-
-.password-group {
+.password-wrapper {
   position: relative;
   width: 100%;
 }
 
-.password-group .auth-input {
-  padding-right: 50px; /* space for eye icon */
-  width: 100%;
+.password-wrapper input {
+  padding-right: 42px; /* space for eye icon */
 }
 
 .password-toggle {
   position: absolute;
-  right: 16px;
+  right: 14px;
   top: 50%;
   transform: translateY(-50%);
   background: transparent;
   border: none;
   cursor: pointer;
-  color: var(--text-secondary);
-  padding: 6px;
-  border-radius: 4px;
+  color: var(--text-muted);
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
-  z-index: 1;
 }
 
 .password-toggle:hover {
   color: var(--primary);
-  background: rgba(59, 130, 246, 0.08);
-}
-
-[data-theme="dark"] .password-toggle:hover {
-  background: rgba(59, 130, 246, 0.15);
 }
 
 .password-toggle:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: -2px;
-}
-
-.password-toggle:active {
-  transform: translateY(-50%) scale(0.95);
-}
-
-.password-toggle svg {
-  width: 20px;
-  height: 20px;
-  stroke-width: 2.5;
+  outline: none;
 }
 
 /* =====================================================
