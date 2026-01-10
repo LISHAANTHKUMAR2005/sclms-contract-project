@@ -302,33 +302,60 @@
 .input-group {
   position: relative;
   width: 100%;
+  display: flex;
+  align-items: center;
 }
 
-.password-group input {
-  padding-right: 48px; /* space for eye icon */
+.password-group {
+  position: relative;
+  width: 100%;
+}
+
+.password-group .auth-input {
+  padding-right: 50px; /* space for eye icon */
+  width: 100%;
 }
 
 .password-toggle {
   position: absolute;
-  right: 14px;
+  right: 16px;
   top: 50%;
   transform: translateY(-50%);
   background: transparent;
   border: none;
   cursor: pointer;
-  color: var(--text-muted);
-  padding: 0;
+  color: var(--text-secondary);
+  padding: 6px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 1;
 }
 
 .password-toggle:hover {
   color: var(--primary);
+  background: rgba(59, 130, 246, 0.08);
+}
+
+[data-theme="dark"] .password-toggle:hover {
+  background: rgba(59, 130, 246, 0.15);
 }
 
 .password-toggle:focus {
-  outline: none;
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}
+
+.password-toggle:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.password-toggle svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2.5;
 }
 
 /* =====================================================
@@ -645,13 +672,13 @@
     font-size: 16px; /* Prevent zoom on iOS */
   }
 
-  .password-group input {
-    padding-right: 48px;
+  .password-group .auth-input {
+    padding-right: 50px;
     font-size: 16px;
   }
 
   .password-toggle {
-    right: 12px;
+    right: 14px;
   }
 
   .auth-card button {
