@@ -3,17 +3,27 @@ FROM maven:3.9.6-eclipse-temurin-17 AS build
 
 WORKDIR /app
 
-COPY pom.xml .
+# Copy backend pom.xml
+COPY sclms-backend/pom.xml .
+
+# Download dependencies
 RUN mvn dependency:go-offline
 
-COPY src ./src
+# Copy backend source
+COPY sclms-backend/src ./src
+
+# Build jar
 RUN mvn clean package -DskipTests
+
 
 # ================= RUNTIME STAGE =================
 FROM eclipse-temurin:17-jre
 
 WORKDIR /app
+
+# Copy jar from build stage
 COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
+
 ENTRYPOINT ["java","-jar","app.jar"]
