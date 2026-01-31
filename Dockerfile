@@ -6,7 +6,6 @@ WORKDIR /app
 # Copy backend pom.xml
 COPY sclms-backend/pom.xml .
 
-# Download dependencies
 RUN mvn dependency:go-offline
 
 # Copy backend source
@@ -15,13 +14,11 @@ COPY sclms-backend/src ./src
 # Build jar
 RUN mvn clean package -DskipTests
 
-
 # ================= RUNTIME STAGE =================
 FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
-# Copy jar from build stage
 COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
