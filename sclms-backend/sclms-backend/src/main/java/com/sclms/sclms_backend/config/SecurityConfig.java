@@ -37,26 +37,26 @@ public class SecurityConfig {
 
         http
 
-            // Disable CSRF (JWT Based)
-            .csrf(csrf -> csrf.disable())
-
-            // Enable CORS
+            // ✅ Enable CORS (from bean below)
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-            // Stateless session
+            // ✅ Disable CSRF (JWT)
+            .csrf(csrf -> csrf.disable())
+
+            // ✅ Stateless
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
 
-            // Authorization
+            // ✅ Authorization
             .authorizeHttpRequests(auth -> auth
 
                 // Preflight
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                // ==========================
-                // PUBLIC ENDPOINTS (NO JWT)
-                // ==========================
+                // ======================
+                // PUBLIC
+                // ======================
                 .requestMatchers(
                         "/",
                         "/api/auth/**",
@@ -65,15 +65,15 @@ public class SecurityConfig {
                         "/v3/api-docs/**"
                 ).permitAll()
 
-                // ==========================
-                // AUTHENTICATED USERS
-                // ==========================
+                // ======================
+                // AUTHENTICATED
+                // ======================
                 .requestMatchers("/api/auth/change-password")
                 .authenticated()
 
-                // ==========================
+                // ======================
                 // USER / APPROVER / ADMIN
-                // ==========================
+                // ======================
                 .requestMatchers(
                         "/api/contracts/my/**",
                         "/api/contracts/create/**",
@@ -84,9 +84,9 @@ public class SecurityConfig {
                 )
                 .hasAnyAuthority("ROLE_USER", "ROLE_APPROVER", "ROLE_ADMIN")
 
-                // ==========================
+                // ======================
                 // APPROVER + ADMIN
-                // ==========================
+                // ======================
                 .requestMatchers(
                         "/api/contracts/approver/**",
                         "/api/contracts/activity/approver/**",
@@ -95,19 +95,19 @@ public class SecurityConfig {
                 )
                 .hasAnyAuthority("ROLE_APPROVER", "ROLE_ADMIN")
 
-                // ==========================
-                // ADMIN ONLY
-                // ==========================
+                // ======================
+                // ADMIN
+                // ======================
                 .requestMatchers("/api/admin/**")
                 .hasAuthority("ROLE_ADMIN")
 
-                // ==========================
-                // EVERYTHING ELSE
-                // ==========================
+                // ======================
+                // OTHER
+                // ======================
                 .anyRequest().authenticated()
             )
 
-            // JWT Filter
+            // ✅ JWT Filter
             .addFilterBefore(
                 jwtAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class
@@ -117,7 +117,7 @@ public class SecurityConfig {
     }
 
     // ===============================
-    // CORS CONFIG (VERY IMPORTANT)
+    // CORS CONFIG (FINAL)
     // ===============================
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -126,10 +126,10 @@ public class SecurityConfig {
 
         config.setAllowCredentials(true);
 
-        config.setAllowedOrigins(List.of(
-                "http://localhost:3000",
-                "http://localhost:5173",
-                "https://sclms-contract-project.vercel.app"
+        // ✅ Allow ALL Vercel + Local
+        config.setAllowedOriginPatterns(List.of(
+                "http://localhost:*",
+                "https://*.vercel.app"
         ));
 
         config.setAllowedMethods(List.of(
@@ -137,6 +137,9 @@ public class SecurityConfig {
         ));
 
         config.setAllowedHeaders(List.of("*"));
+
+        // ✅ Allow JWT header
+        config.setExposedHeaders(List.of("Authorization"));
 
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
