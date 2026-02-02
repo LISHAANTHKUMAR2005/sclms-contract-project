@@ -1,13 +1,25 @@
 import { createLogger } from "./logger";
 
 const logger = createLogger("API");
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://sclms-contract-project-production.up.railway.app/api/";
 
-// Helper — read CSRF token from cookies (for non-admin endpoints only)
+/**
+ * Base API URL
+ * Priority:
+ * 1. Vercel ENV
+ * 2. Render fallback
+ */
+const API_BASE_URL = (
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://sclms-contract-project.onrender.com"
+).replace(/\/+$/, ""); // remove trailing slash
+
+// ==============================
+// CSRF Token Helper
+// ==============================
 const getCsrfToken = () => {
   const name = "XSRF-TOKEN=";
-  const decodedCookie = decodeURIComponent(document.cookie);
-  const cookies = decodedCookie.split(";");
+  const decoded = decodeURIComponent(document.cookie);
+  const cookies = decoded.split(";");
 
   for (let cookie of cookies) {
     cookie = cookie.trim();
@@ -15,18 +27,23 @@ const getCsrfToken = () => {
       return cookie.substring(name.length);
     }
   }
+
   return "";
 };
 
+// ==============================
+// Core API Handler
+// ==============================
 export const apiRequest = async (endpoint, options = {}) => {
   const token = localStorage.getItem("token");
 
-  // Normalize endpoint to avoid leading-slash bugs
-  const cleanEndpoint = endpoint.replace(/^\//, "");
+  // Normalize endpoint
+  const cleanEndpoint = endpoint.replace(/^\/+/, "");
 
   const method = options.method || "GET";
 
   const config = {
+    method,
     headers: {
       "Content-Type": "application/json",
       ...options.headers,
@@ -34,88 +51,80 @@ export const apiRequest = async (endpoint, options = {}) => {
     ...options,
   };
 
-  // Attach JWT if available
+  // Attach JWT
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
   // ==============================
-  // CSRF — apply ONLY to non-admin APIs
+  // CSRF (non-admin only)
   // ==============================
-  const isAdminEndpoint = cleanEndpoint.startsWith("admin/");
+  const isAdmin = cleanEndpoint.startsWith("admin/");
 
-  if (method !== "GET" && !isAdminEndpoint) {
-    const csrfToken = getCsrfToken();
-    if (csrfToken) {
-      config.headers["X-XSRF-TOKEN"] = csrfToken;
+  if (method !== "GET" && !isAdmin) {
+    const csrf = getCsrfToken();
+    if (csrf) {
+      config.headers["X-XSRF-TOKEN"] = csrf;
     }
   }
 
+  const url = `${API_BASE_URL}/${cleanEndpoint}`;
+
+  logger.info(`Request → ${method} ${url}`);
+
   // ==============================
-  // Fire request
+  // Send Request
   // ==============================
-  const response = await fetch(`${API_BASE_URL}${cleanEndpoint}`, config);
+  const response = await fetch(url, config);
 
   // ==============================
   // Error Handling
   // ==============================
   if (!response.ok) {
+    let text = "";
+
+    try {
+      text = await response.text();
+    } catch {}
+
     // ---------- 403 ----------
     if (response.status === 403) {
-      let text = "";
-      try {
-        text = await response.text();
-      } catch {}
-
-      const isJwtFailure =
+      const isJwtError =
         text?.toLowerCase().includes("jwt") ||
         text?.toLowerCase().includes("expired") ||
-        text?.toLowerCase().includes("signature") ||
-        text?.toLowerCase().includes("invalid token");
+        text?.toLowerCase().includes("invalid");
 
-      if (token && isJwtFailure) {
-        logger.error(
-          `JWT invalid/expired for ${cleanEndpoint}. Logging out.`
-        );
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+      if (token && isJwtError) {
+        logger.error("JWT expired → Logging out");
+
+        localStorage.clear();
         window.location.href = "/login";
-        throw new Error("Session expired. Please log in again.");
+
+        throw new Error("Session expired. Please login again.");
       }
 
-      logger.error(
-        `Access denied → ${cleanEndpoint}. Status: 403, Message: ${
-          text || "No message"
-        }`
-      );
-      throw new Error(
-        text || "Access denied. You don't have permission for this resource."
-      );
+      logger.error(`403 Forbidden → ${text}`);
+
+      throw new Error(text || "Access denied");
     }
 
     // ---------- 401 ----------
     if (response.status === 401) {
-      const message = await response.text();
-      logger.apiError(
-        `Unauthorized → ${cleanEndpoint}. Message: ${
-          message || "No message"
-        }`
-      );
-      throw new Error(message || "Unauthorized request");
+      logger.error(`401 Unauthorized → ${text}`);
+
+      throw new Error(text || "Unauthorized");
     }
 
-    // ---------- Other Errors ----------
-    const message = await response.text();
-    logger.apiError(
-      `API error → ${cleanEndpoint}. Status: ${
-        response.status
-      }, Message: ${message || "No message"}`
+    // ---------- Others ----------
+    logger.error(
+      `API Error → ${response.status} → ${text || "Unknown error"}`
     );
-    throw new Error(message || `HTTP error ${response.status}`);
+
+    throw new Error(text || `HTTP ${response.status}`);
   }
 
   // ==============================
-  // Parse JSON Safely
+  // JSON Parse
   // ==============================
   try {
     return await response.json();
@@ -124,71 +133,113 @@ export const apiRequest = async (endpoint, options = {}) => {
   }
 };
 
-// =================================
-// Convenience API Helpers
-// =================================
+// ==============================
+// API Shortcuts
+// ==============================
 export const api = {
-  get: (endpoint) => apiRequest(endpoint),
-  post: (endpoint, data) =>
-    apiRequest(endpoint, { method: "POST", body: JSON.stringify(data) }),
-  put: (endpoint, data) =>
-    apiRequest(endpoint, { method: "PUT", body: JSON.stringify(data) }),
-  patch: (endpoint, data) =>
-    apiRequest(endpoint, { method: "PATCH", body: JSON.stringify(data) }),
-  delete: (endpoint) =>
-    apiRequest(endpoint, { method: "DELETE" }),
+  get: (url) => apiRequest(url),
 
+  post: (url, data) =>
+    apiRequest(url, {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  put: (url, data) =>
+    apiRequest(url, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
+
+  patch: (url, data) =>
+    apiRequest(url, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+
+  delete: (url) =>
+    apiRequest(url, {
+      method: "DELETE",
+    }),
+
+  // ==============================
   // Notifications
+  // ==============================
   getMyNotifications: () => apiRequest("notifications/my"),
-  getUnreadCount: () => apiRequest("notifications/unread/count"),
 
-  // Secure File Download
-  downloadFile: async (endpoint, filename = null) => {
+  getUnreadCount: () =>
+    apiRequest("notifications/unread/count"),
+
+  // ==============================
+  // File Download
+  // ==============================
+  downloadFile: async (endpoint, filename = "download") => {
     const token = localStorage.getItem("token");
-    const cleanEndpoint = endpoint.replace(/^\//, "");
 
-    const response = await fetch(`${API_BASE_URL}${cleanEndpoint}`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
+    const clean = endpoint.replace(/^\/+/, "");
+
+    const res = await fetch(`${API_BASE_URL}/${clean}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
-    if (!response.ok) throw new Error(`Download failed: ${response.status}`);
+    if (!res.ok) throw new Error("Download failed");
 
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
+    const blob = await res.blob();
+
+    const url = URL.createObjectURL(blob);
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = filename || "download";
+    a.download = filename;
+
     document.body.appendChild(a);
     a.click();
-    window.URL.revokeObjectURL(url);
+
+    URL.revokeObjectURL(url);
     document.body.removeChild(a);
   },
 
-  // Open File in New Tab
+  // ==============================
+  // Open File
+  // ==============================
   openFile: async (endpoint) => {
     const token = localStorage.getItem("token");
-    const cleanEndpoint = endpoint.replace(/^\//, "");
 
-    const response = await fetch(`${API_BASE_URL}${cleanEndpoint}`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
+    const clean = endpoint.replace(/^\/+/, "");
+
+    const res = await fetch(`${API_BASE_URL}/${clean}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
-    if (!response.ok) throw new Error(`Failed to load file: ${response.status}`);
+    if (!res.ok) throw new Error("File load failed");
 
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    window.open(url, "_blank");
+    const blob = await res.blob();
+
+    window.open(URL.createObjectURL(blob), "_blank");
   },
 };
 
+// ==============================
 // Notifications API
+// ==============================
 export const notificationAPI = {
-  getMyNotifications: () => apiRequest("notifications/my"),
+  getMyNotifications: () =>
+    apiRequest("notifications/my"),
+
   markAsRead: (id) =>
-    apiRequest(`notifications/read/${id}`, { method: "PATCH" }),
-  markAllRead: () => apiRequest("notifications/read-all", { method: "PATCH" }),
-  getUnreadCount: () => apiRequest("notifications/unread/count"),
+    apiRequest(`notifications/read/${id}`, {
+      method: "PATCH",
+    }),
+
+  markAllRead: () =>
+    apiRequest("notifications/read-all", {
+      method: "PATCH",
+    }),
+
+  getUnreadCount: () =>
+    apiRequest("notifications/unread/count"),
 };
