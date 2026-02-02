@@ -10,8 +10,9 @@ const logger = createLogger("API");
  */
 const API_BASE_URL = (
   import.meta.env.VITE_API_BASE_URL ||
-  "https://sclms-contract-project.onrender.com"
-).replace(/\/+$/, ""); // remove trailing slash
+  "https://sclms-contract-project.onrender.com/api"
+).replace(/\/+$/, "");
+
 
 // ==============================
 // CSRF Token Helper
