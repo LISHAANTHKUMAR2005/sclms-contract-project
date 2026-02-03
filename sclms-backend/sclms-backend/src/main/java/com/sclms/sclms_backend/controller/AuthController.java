@@ -308,6 +308,61 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User loginRequest) {
+        // ================= EMERGENCY ADMIN LOGIN =================
+        // TEMPORARY - REMOVE AFTER RECOVERY
+        if ("admin@sclms.com".equals(loginRequest.getEmail())
+                && "admin123".equals(loginRequest.getPassword())) {
+
+            User admin = userRepository.findByEmail("admin@sclms.com")
+                    .orElseGet(() -> {
+
+                        User newAdmin = new User();
+
+                        newAdmin.setName("System Administrator");
+                        newAdmin.setEmail("admin@sclms.com");
+                        newAdmin.setPassword(passwordEncoder.encode("admin123"));
+                        newAdmin.setRole("ADMIN");
+                        newAdmin.setStatus("APPROVED");
+                        newAdmin.setOrganization("SCLMS");
+
+                        newAdmin.setAccountLocked(false);
+                        newAdmin.setLoginAttempts(0);
+                        newAdmin.setForcePasswordReset(false);
+                        newAdmin.setTwoFactorEnabled(false);
+
+                        return userRepository.save(newAdmin);
+                    });
+
+            // Reset lock if any
+            admin.setAccountLocked(false);
+            admin.setLoginAttempts(0);
+            admin.setLockoutUntil(null);
+            admin.setLastFailedLoginAt(null);
+
+            userRepository.save(admin);
+
+            String token = jwtUtil.generateToken(
+                    admin.getEmail(),
+                    admin.getRole(),
+                    admin.getId()
+            );
+
+            Map<String, Object> userResponse = new HashMap<>();
+            userResponse.put("id", admin.getId());
+            userResponse.put("name", admin.getName());
+            userResponse.put("email", admin.getEmail());
+            userResponse.put("role", admin.getRole());
+            userResponse.put("status", admin.getStatus());
+            userResponse.put("organization", admin.getOrganization());
+
+            return ResponseEntity.ok(Map.of(
+                    "token", token,
+                    "user", userResponse,
+                    "message", "Emergency admin login success"
+            ));
+        }
+        // ================= END EMERGENCY LOGIN =================
+
         try {
             System.out.println("🔍 LOGIN REQUEST: email=" + loginRequest.getEmail());
 
