@@ -41,7 +41,7 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
-    @PostConstruct
+    // @PostConstruct
     public void initDefaultUsers() {
         try {
             // Force reset admin (safe recovery)
