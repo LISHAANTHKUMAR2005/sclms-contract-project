@@ -23,139 +23,162 @@ import java.util.List;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+        private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-    }
+        public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+                this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        }
 
-    // ===============================
-    // MAIN SECURITY CONFIG
-    // ===============================
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // ===============================
+        // MAIN SECURITY CONFIG
+        // ===============================
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http
+                http
 
-                // ✅ Enable CORS (from bean below)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                                // ✅ Enable CORS (from bean below)
+                                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-                // ✅ Disable CSRF (JWT)
-                .csrf(csrf -> csrf.disable())
+                                // ✅ Disable CSRF (JWT)
+                                .csrf(csrf -> csrf.disable())
 
-                // ✅ Stateless
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                // ✅ Stateless
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                // ✅ Authorization
-                .authorizeHttpRequests(auth -> auth
+                                // ✅ Authorization
+                                .authorizeHttpRequests(auth -> auth
 
-                        // Preflight
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                                                // Preflight
+                                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // ======================
-                        // PUBLIC
-                        // ======================
-                        .requestMatchers(
-                                "/",
-                                "/api/auth/**",
-                                "/api/debug/**",
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**")
-                        .permitAll()
+                                                // ======================
+                                                // PUBLIC
+                                                // ======================
+                                                .requestMatchers(
+                                                                "/",
+                                                                "/api/auth/**",
+                                                                "/api/debug/**",
+                                                                "/swagger-ui/**",
+                                                                "/v3/api-docs/**")
+                                                .permitAll()
 
-                        // ======================
-                        // AUTHENTICATED
-                        // ======================
-                        .requestMatchers("/api/auth/change-password")
-                        .authenticated()
+                                                // ======================
+                                                // AUTHENTICATED
+                                                // ======================
+                                                .requestMatchers("/api/auth/change-password")
+                                                .authenticated()
 
-                        // ======================
-                        // USER / APPROVER / ADMIN
-                        // ======================
-                        .requestMatchers(
-                                "/api/contracts/my/**",
-                                "/api/contracts/create/**",
-                                "/api/notifications/**",
-                                "/api/2fa/**",
-                                "/api/contracts/file/**",
-                                "/api/organizations/**")
-                        .hasAnyAuthority("ROLE_USER", "ROLE_APPROVER", "ROLE_ADMIN")
+                                                // ======================
+                                                // USER / APPROVER / ADMIN
+                                                // ======================
+                                                .requestMatchers(
+                                                                "/api/contracts/my/**",
+                                                                "/api/contracts/create/**",
+                                                                "/api/notifications/**",
+                                                                "/api/2fa/**",
+                                                                "/api/contracts/file/**",
+                                                                "/api/organizations/**")
+                                                .hasAnyAuthority("ROLE_USER", "ROLE_APPROVER", "ROLE_ADMIN")
 
-                        // ======================
-                        // APPROVER + ADMIN
-                        // ======================
-                        .requestMatchers(
-                                "/api/contracts/approver/**",
-                                "/api/contracts/activity/approver/**",
-                                "/api/contracts/history/**",
-                                "/api/users/**")
-                        .hasAnyAuthority("ROLE_APPROVER", "ROLE_ADMIN")
+                                                // ======================
+                                                // APPROVER + ADMIN
+                                                // ======================
+                                                .requestMatchers(
+                                                                "/api/contracts/approver/**",
+                                                                "/api/contracts/activity/approver/**",
+                                                                "/api/contracts/history/**",
+                                                                "/api/users/**")
+                                                .hasAnyAuthority("ROLE_APPROVER", "ROLE_ADMIN")
 
-                        // ======================
-                        // ADMIN
-                        // ======================
-                        .requestMatchers("/api/admin/**")
-                        .hasAuthority("ROLE_ADMIN")
+                                                // ======================
+                                                // ADMIN
+                                                // ======================
+                                                .requestMatchers("/api/admin/**")
+                                                .hasAuthority("ROLE_ADMIN")
 
-                        // ======================
-                        // OTHER
-                        // ======================
-                        .anyRequest().authenticated())
+                                                // ======================
+                                                // OTHER
+                                                // ======================
+                                                .anyRequest().authenticated())
 
-                // ✅ JWT Filter
-                .addFilterBefore(
-                        jwtAuthenticationFilter,
-                        UsernamePasswordAuthenticationFilter.class);
+                                // ✅ JWT Filter
+                                .addFilterBefore(
+                                                jwtAuthenticationFilter,
+                                                UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
-    }
+                return http.build();
+        }
 
-    // ===============================
-    // CORS CONFIG (FINAL)
-    // ===============================
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+        // ===============================
+        // CORS CONFIG (FINAL)
+        // ===============================
+        @Bean
+        public CorsConfigurationSource corsConfigurationSource() {
 
-        CorsConfiguration config = new CorsConfiguration();
+                CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowCredentials(true);
+                config.setAllowCredentials(true);
 
-        // ✅ Allow ALL Vercel + Local
-        config.setAllowedOriginPatterns(List.of(
-                "http://localhost:*",
-                "https://*.vercel.app",
-                "https://sclms-contract-project.vercel.app"));
+                // ✅ Allow ALL Vercel + Local
+                config.setAllowedOriginPatterns(List.of(
+                                "http://localhost:*",
+                                "https://*.vercel.app",
+                                "https://sclms-contract-project.vercel.app"));
 
-        config.setAllowedMethods(List.of(
-                "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+                config.setAllowedMethods(List.of(
+                                "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
 
-        config.setAllowedHeaders(List.of("*"));
+                config.setAllowedHeaders(List.of("*"));
 
-        // ✅ Allow JWT header
-        config.setExposedHeaders(List.of("Authorization"));
+                // ✅ Allow JWT header
+                config.setExposedHeaders(List.of("Authorization"));
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-        source.registerCorsConfiguration("/**", config);
+                source.registerCorsConfiguration("/**", config);
 
-        return source;
-    }
+                return source;
+        }
 
-    // ===============================
-    // AUTH MANAGER
-    // ===============================
-    @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration config) throws Exception {
+        // ===============================
+        // AUTH MANAGER
+        // ===============================
+        @Bean
+        public AuthenticationManager authenticationManager(
+                        AuthenticationConfiguration config) throws Exception {
 
-        return config.getAuthenticationManager();
-    }
+                return config.getAuthenticationManager();
+        }
 
-    // ===============================
-    // PASSWORD ENCODER
-    // ===============================
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+        // ===============================
+        // PASSWORD ENCODER
+        // ===============================
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
+
+        // ===============================
+        // GLOBAL CORS FILTER (Fixes 403s)
+        // ===============================
+        @Bean
+        public org.springframework.boot.web.servlet.FilterRegistrationBean<org.springframework.web.filter.CorsFilter> corsFilter() {
+                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+                CorsConfiguration config = new CorsConfiguration();
+                config.setAllowCredentials(true);
+                config.setAllowedOriginPatterns(List.of(
+                                "http://localhost:*",
+                                "https://*.vercel.app",
+                                "https://sclms-contract-project.vercel.app"));
+                config.addAllowedHeader("*");
+                config.addAllowedMethod("*");
+                source.registerCorsConfiguration("/**", config);
+
+                org.springframework.boot.web.servlet.FilterRegistrationBean<org.springframework.web.filter.CorsFilter> bean = new org.springframework.boot.web.servlet.FilterRegistrationBean<>(
+                                new org.springframework.web.filter.CorsFilter(source));
+                bean.setOrder(org.springframework.core.Ordered.HIGHEST_PRECEDENCE);
+                return bean;
+        }
 }
