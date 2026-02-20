@@ -1,9 +1,5 @@
--- MySQL Schema for SCLMS Database
+-- H2 Schema for SCLMS Database
 -- This file is automatically executed by Spring Boot during application startup
-
--- Create database if it doesn't exist
-CREATE DATABASE IF NOT EXISTS sclms_db;
-USE sclms_db;
 
 -- Users table
 CREATE TABLE IF NOT EXISTS users (
@@ -17,7 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
     two_factor_enabled BOOLEAN DEFAULT FALSE,
     two_factor_secret VARCHAR(255),
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     force_password_reset BOOLEAN DEFAULT FALSE
 );
 
@@ -31,8 +27,8 @@ CREATE TABLE IF NOT EXISTS contracts (
     contract_type VARCHAR(100),
     value DECIMAL(15,2),
     currency VARCHAR(10) DEFAULT 'USD',
-    start_date DATETIME,
-    end_date DATETIME,
+    start_date TIMESTAMP,
+    end_date TIMESTAMP,
     created_by BIGINT,
     assigned_to BIGINT,
     organization VARCHAR(255),
@@ -40,7 +36,7 @@ CREATE TABLE IF NOT EXISTS contracts (
     file_name VARCHAR(255),
     file_size BIGINT,
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (created_by) REFERENCES users(id),
     FOREIGN KEY (assigned_to) REFERENCES users(id)
 );
@@ -86,14 +82,14 @@ CREATE TABLE IF NOT EXISTS notifications (
 );
 
 -- Indexes for performance
-CREATE INDEX idx_users_email ON users(email);
-CREATE INDEX idx_users_role ON users(role);
-CREATE INDEX idx_users_status ON users(status);
-CREATE INDEX idx_contracts_status ON contracts(status);
-CREATE INDEX idx_contracts_created_by ON contracts(created_by);
-CREATE INDEX idx_contracts_assigned_to ON contracts(assigned_to);
-CREATE INDEX idx_notifications_user_id ON notifications(user_id);
-CREATE INDEX idx_notifications_read_status ON notifications(read_status);
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
+CREATE INDEX IF NOT EXISTS idx_users_status ON users(status);
+CREATE INDEX IF NOT EXISTS idx_contracts_status ON contracts(status);
+CREATE INDEX IF NOT EXISTS idx_contracts_created_by ON contracts(created_by);
+CREATE INDEX IF NOT EXISTS idx_contracts_assigned_to ON contracts(assigned_to);
+CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id);
+CREATE INDEX IF NOT EXISTS idx_notifications_read_status ON notifications(is_read);
 
 -- System Settings table (singleton pattern - only one row)
 CREATE TABLE IF NOT EXISTS system_settings (
@@ -159,7 +155,7 @@ CREATE TABLE IF NOT EXISTS system_settings (
 
     -- Metadata
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_by BIGINT,
 
     FOREIGN KEY (updated_by) REFERENCES users(id)

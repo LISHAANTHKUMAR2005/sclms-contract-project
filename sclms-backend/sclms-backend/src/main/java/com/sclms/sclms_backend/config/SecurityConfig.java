@@ -37,81 +37,75 @@ public class SecurityConfig {
 
         http
 
-            // ✅ Enable CORS (from bean below)
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                // ✅ Enable CORS (from bean below)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-            // ✅ Disable CSRF (JWT)
-            .csrf(csrf -> csrf.disable())
+                // ✅ Disable CSRF (JWT)
+                .csrf(csrf -> csrf.disable())
 
-            // ✅ Stateless
-            .sessionManagement(session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
+                // ✅ Stateless
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-            // ✅ Authorization
-            .authorizeHttpRequests(auth -> auth
+                // ✅ Authorization
+                .authorizeHttpRequests(auth -> auth
 
-                // Preflight
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        // Preflight
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                // ======================
-                // PUBLIC
-                // ======================
-                .requestMatchers(
-                        "/",
-                        "/api/auth/**",
-                        "/api/debug/**",
-                        "/swagger-ui/**",
-                        "/v3/api-docs/**"
-                ).permitAll()
+                        // ======================
+                        // PUBLIC
+                        // ======================
+                        .requestMatchers(
+                                "/",
+                                "/api/auth/**",
+                                "/api/debug/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**")
+                        .permitAll()
 
-                // ======================
-                // AUTHENTICATED
-                // ======================
-                .requestMatchers("/api/auth/change-password")
-                .authenticated()
+                        // ======================
+                        // AUTHENTICATED
+                        // ======================
+                        .requestMatchers("/api/auth/change-password")
+                        .authenticated()
 
-                // ======================
-                // USER / APPROVER / ADMIN
-                // ======================
-                .requestMatchers(
-                        "/api/contracts/my/**",
-                        "/api/contracts/create/**",
-                        "/api/notifications/**",
-                        "/api/2fa/**",
-                        "/api/contracts/file/**",
-                        "/api/organizations/**"
-                )
-                .hasAnyAuthority("ROLE_USER", "ROLE_APPROVER", "ROLE_ADMIN")
+                        // ======================
+                        // USER / APPROVER / ADMIN
+                        // ======================
+                        .requestMatchers(
+                                "/api/contracts/my/**",
+                                "/api/contracts/create/**",
+                                "/api/notifications/**",
+                                "/api/2fa/**",
+                                "/api/contracts/file/**",
+                                "/api/organizations/**")
+                        .hasAnyAuthority("ROLE_USER", "ROLE_APPROVER", "ROLE_ADMIN")
 
-                // ======================
-                // APPROVER + ADMIN
-                // ======================
-                .requestMatchers(
-                        "/api/contracts/approver/**",
-                        "/api/contracts/activity/approver/**",
-                        "/api/contracts/history/**",
-                        "/api/users/**"
-                )
-                .hasAnyAuthority("ROLE_APPROVER", "ROLE_ADMIN")
+                        // ======================
+                        // APPROVER + ADMIN
+                        // ======================
+                        .requestMatchers(
+                                "/api/contracts/approver/**",
+                                "/api/contracts/activity/approver/**",
+                                "/api/contracts/history/**",
+                                "/api/users/**")
+                        .hasAnyAuthority("ROLE_APPROVER", "ROLE_ADMIN")
 
-                // ======================
-                // ADMIN
-                // ======================
-                .requestMatchers("/api/admin/**")
-                .hasAuthority("ROLE_ADMIN")
+                        // ======================
+                        // ADMIN
+                        // ======================
+                        .requestMatchers("/api/admin/**")
+                        .hasAuthority("ROLE_ADMIN")
 
-                // ======================
-                // OTHER
-                // ======================
-                .anyRequest().authenticated()
-            )
+                        // ======================
+                        // OTHER
+                        // ======================
+                        .anyRequest().authenticated())
 
-            // ✅ JWT Filter
-            .addFilterBefore(
-                jwtAuthenticationFilter,
-                UsernamePasswordAuthenticationFilter.class
-            );
+                // ✅ JWT Filter
+                .addFilterBefore(
+                        jwtAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -129,20 +123,18 @@ public class SecurityConfig {
         // ✅ Allow ALL Vercel + Local
         config.setAllowedOriginPatterns(List.of(
                 "http://localhost:*",
-                "https://*.vercel.app"
-        ));
+                "https://*.vercel.app",
+                "https://sclms-contract-project.vercel.app"));
 
         config.setAllowedMethods(List.of(
-                "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"
-        ));
+                "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
 
         config.setAllowedHeaders(List.of("*"));
 
         // ✅ Allow JWT header
         config.setExposedHeaders(List.of("Authorization"));
 
-        UrlBasedCorsConfigurationSource source =
-                new UrlBasedCorsConfigurationSource();
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         source.registerCorsConfiguration("/**", config);
 

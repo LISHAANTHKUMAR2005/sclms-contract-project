@@ -32,7 +32,8 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public AuthController(UserRepository userRepository, ContractRepository contractRepository, UserService userService, SecurityService securityService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+    public AuthController(UserRepository userRepository, ContractRepository contractRepository, UserService userService,
+            SecurityService securityService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.contractRepository = contractRepository;
         this.userService = userService;
@@ -41,7 +42,7 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
-    // @PostConstruct
+    @PostConstruct
     public void initDefaultUsers() {
         try {
             // Force reset admin (safe recovery)
@@ -188,7 +189,8 @@ public class AuthController {
                 // Create sample pending contract
                 Contract pendingContract = new Contract();
                 pendingContract.setTitle("IT Infrastructure Upgrade");
-                pendingContract.setDescription("Complete upgrade of company IT infrastructure including servers, networking equipment, and software licenses.");
+                pendingContract.setDescription(
+                        "Complete upgrade of company IT infrastructure including servers, networking equipment, and software licenses.");
                 pendingContract.setContractType("SERVICE");
                 pendingContract.setFromOrg("TechCorp");
                 pendingContract.setToOrg("SCLMS");
@@ -203,7 +205,8 @@ public class AuthController {
                 // Create sample approved contract
                 Contract approvedContract = new Contract();
                 approvedContract.setTitle("Office Maintenance Services");
-                approvedContract.setDescription("Monthly maintenance services for office facilities including cleaning, security, and equipment servicing.");
+                approvedContract.setDescription(
+                        "Monthly maintenance services for office facilities including cleaning, security, and equipment servicing.");
                 approvedContract.setContractType("MAINTENANCE");
                 approvedContract.setFromOrg("TechCorp");
                 approvedContract.setToOrg("SCLMS");
@@ -221,7 +224,8 @@ public class AuthController {
                 // Create sample rejected contract
                 Contract rejectedContract = new Contract();
                 rejectedContract.setTitle("Marketing Campaign Services");
-                rejectedContract.setDescription("Comprehensive digital marketing campaign including social media, content creation, and analytics.");
+                rejectedContract.setDescription(
+                        "Comprehensive digital marketing campaign including social media, content creation, and analytics.");
                 rejectedContract.setContractType("SERVICE");
                 rejectedContract.setFromOrg("TechCorp");
                 rejectedContract.setToOrg("SCLMS");
@@ -254,9 +258,8 @@ public class AuthController {
                     errors.put(error.getField(), error.getDefaultMessage());
                 }
                 return ResponseEntity.badRequest().body(Map.of(
-                    "error", "Validation failed",
-                    "fieldErrors", errors
-                ));
+                        "error", "Validation failed",
+                        "fieldErrors", errors));
             }
 
             // Create user entity from validated request
@@ -288,19 +291,17 @@ public class AuthController {
 
             // Create a safe response object without sensitive data
             Map<String, Object> userResponse = Map.of(
-                "id", savedUser.getId(),
-                "name", savedUser.getName(),
-                "email", savedUser.getEmail(),
-                "role", savedUser.getRole(),
-                "status", savedUser.getStatus(),
-                "organization", savedUser.getOrganization(),
-                "createdDate", savedUser.getCreatedDate()
-            );
+                    "id", savedUser.getId(),
+                    "name", savedUser.getName(),
+                    "email", savedUser.getEmail(),
+                    "role", savedUser.getRole(),
+                    "status", savedUser.getStatus(),
+                    "organization", savedUser.getOrganization(),
+                    "createdDate", savedUser.getCreatedDate());
 
             return ResponseEntity.ok(Map.of(
-                "message", "Registration successful. Please wait for approval.",
-                "user", userResponse
-            ));
+                    "message", "Registration successful. Please wait for approval.",
+                    "user", userResponse));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
@@ -344,8 +345,7 @@ public class AuthController {
             String token = jwtUtil.generateToken(
                     admin.getEmail(),
                     admin.getRole(),
-                    admin.getId()
-            );
+                    admin.getId());
 
             Map<String, Object> userResponse = new HashMap<>();
             userResponse.put("id", admin.getId());
@@ -358,8 +358,7 @@ public class AuthController {
             return ResponseEntity.ok(Map.of(
                     "token", token,
                     "user", userResponse,
-                    "message", "Emergency admin login success"
-            ));
+                    "message", "Emergency admin login success"));
         }
         // ================= END EMERGENCY LOGIN =================
 
@@ -367,13 +366,14 @@ public class AuthController {
             System.out.println("🔍 LOGIN REQUEST: email=" + loginRequest.getEmail());
 
             User user = userService.getUserByEmail(loginRequest.getEmail());
-            System.out.println("🔍 USER FOUND: " + (user != null ? user.getEmail() + " role=" + user.getRole() + " status=" + user.getStatus() : "null"));
+            System.out.println("🔍 USER FOUND: "
+                    + (user != null ? user.getEmail() + " role=" + user.getRole() + " status=" + user.getStatus()
+                            : "null"));
 
             if (user == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("error", "Invalid email or password"));
+                        .body(Map.of("error", "Invalid email or password"));
             }
-
 
             // Check if account is locked
             if (securityService.isAccountLocked(user)) {
@@ -382,16 +382,17 @@ public class AuthController {
                 // Calculate remaining lockout time
                 long remainingMinutes = 0;
                 if (user.getLockoutUntil() != null) {
-                    java.time.Duration duration = java.time.Duration.between(LocalDateTime.now(), user.getLockoutUntil());
+                    java.time.Duration duration = java.time.Duration.between(LocalDateTime.now(),
+                            user.getLockoutUntil());
                     remainingMinutes = Math.max(0, duration.toMinutes());
                 }
 
                 String errorMessage = remainingMinutes > 0
-                    ? String.format("Account locked. Try again in %d minutes.", remainingMinutes)
-                    : "Account locked. Try again after 15 minutes.";
+                        ? String.format("Account locked. Try again in %d minutes.", remainingMinutes)
+                        : "Account locked. Try again after 15 minutes.";
 
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("error", errorMessage));
+                        .body(Map.of("error", errorMessage));
             }
 
             // Check password
@@ -406,11 +407,11 @@ public class AuthController {
                 // Check if account got locked after this attempt
                 if (securityService.isAccountLocked(user)) {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of("error", "Account locked due to too many failed login attempts"));
+                            .body(Map.of("error", "Account locked due to too many failed login attempts"));
                 }
 
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("error", "Invalid email or password"));
+                        .body(Map.of("error", "Invalid email or password"));
             }
 
             // Password is valid - clear any previous failed attempts
@@ -419,7 +420,7 @@ public class AuthController {
             // Check if password has expired
             if (securityService.isPasswordExpired(user)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("error", "Password has expired. Please change your password."));
+                        .body(Map.of("error", "Password has expired. Please change your password."));
             }
 
             // Check if force password reset is required
@@ -439,7 +440,7 @@ public class AuthController {
             if (!"APPROVED".equals(userStatus)) {
                 System.out.println("❌ USER NOT APPROVED: " + user.getEmail() + " status=" + userStatus);
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(Map.of("error", "Account not approved yet"));
+                        .body(Map.of("error", "Account not approved yet"));
             }
 
             // Check if 2FA is required
@@ -471,14 +472,13 @@ public class AuthController {
             userResponse.put("organization", user.getOrganization());
 
             return ResponseEntity.ok(Map.of(
-                "token", token,
-                "user", userResponse,
-                "message", "Login successful"
-            ));
+                    "token", token,
+                    "user", userResponse,
+                    "message", "Login successful"));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(Map.of("error", "Invalid email or password"));
+                    .body(Map.of("error", "Invalid email or password"));
         }
     }
 
@@ -496,15 +496,14 @@ public class AuthController {
             return ResponseEntity.ok(user);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(Map.of("error", "User not found"));
+                    .body(Map.of("error", "User not found"));
         }
     }
 
     @PutMapping("/change-password")
     public ResponseEntity<?> changePassword(
             @RequestBody Map<String, String> passwordRequest,
-            org.springframework.security.core.Authentication auth
-    ) {
+            org.springframework.security.core.Authentication auth) {
         try {
             // Get user - either from authentication or from request body for force reset
             User user;
