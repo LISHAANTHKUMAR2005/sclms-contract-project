@@ -52,8 +52,9 @@ export const apiRequest = async (endpoint, options = {}) => {
     ...options,
   };
 
-  // Attach JWT
-  if (token) {
+  // Attach JWT (Skip for auth endpoints to prevent 403 loops with bad tokens)
+  const isAuthEndpoint = cleanEndpoint.startsWith("auth/") || cleanEndpoint.includes("/auth/");
+  if (token && !isAuthEndpoint) {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
@@ -86,7 +87,7 @@ export const apiRequest = async (endpoint, options = {}) => {
 
     try {
       text = await response.text();
-    } catch {}
+    } catch { }
 
     // ---------- 403 ----------
     if (response.status === 403) {
