@@ -204,14 +204,19 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User loginRequest) {
+        System.out.println("🔥 LOGIN ENDPOINT HIT for: " + loginRequest.getEmail());
+
         // ================= EMERGENCY ADMIN LOGIN =================
         // TEMPORARY - REMOVE AFTER RECOVERY
-        if ("admin@sclms.com".equals(loginRequest.getEmail())
+        if (loginRequest.getEmail() != null &&
+                "admin@sclms.com".equalsIgnoreCase(loginRequest.getEmail().trim())
                 && "admin123".equals(loginRequest.getPassword())) {
+
+            System.out.println("🔥 EMERGENCY ADMIN LOGIN TRIPPED");
 
             User admin = userRepository.findByEmail("admin@sclms.com")
                     .orElseGet(() -> {
-
+                        System.out.println("🔥 RE-CREATING MISSING ADMIN");
                         User newAdmin = new User();
 
                         newAdmin.setName("System Administrator");
@@ -226,8 +231,16 @@ public class AuthController {
                         newAdmin.setForcePasswordReset(false);
                         newAdmin.setTwoFactorEnabled(false);
 
+                        newAdmin.setCreatedDate(java.time.LocalDate.now().toString());
+
                         return userRepository.save(newAdmin);
                     });
+
+            // Ensure Approved
+            if (!"APPROVED".equals(admin.getStatus())) {
+                admin.setStatus("APPROVED");
+                userRepository.save(admin);
+            }
 
             // Reset lock if any
             admin.setAccountLocked(false);
@@ -334,8 +347,9 @@ public class AuthController {
 
             if (!"APPROVED".equals(userStatus)) {
                 System.out.println("❌ USER NOT APPROVED: " + user.getEmail() + " status=" + userStatus);
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body(Map.of("error", "Account not approved yet"));
+                // CHANGE: Return 401 instead of 403 to differentiate from Security Layer
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Account not approved yet. Please wait for admin approval."));
             }
 
             // Check if 2FA is required
