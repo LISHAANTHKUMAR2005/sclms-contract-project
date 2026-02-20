@@ -45,137 +45,32 @@ public class AuthController {
     @PostConstruct
     public void initDefaultUsers() {
         try {
-            // Force reset admin (safe recovery)
-            userRepository.findByEmail("admin@sclms.com").ifPresent(admin -> {
+            // ==========================================
+            // GUARANTEED ADMIN CREATION / RESET
+            // ==========================================
+            String adminEmail = "admin@sclms.com";
 
-                admin.setPassword(passwordEncoder.encode("admin123"));
+            User admin = userRepository.findByEmail(adminEmail).orElse(new User());
 
-                admin.setRole("ADMIN");
-                admin.setStatus("APPROVED");
+            admin.setName("System Administrator");
+            admin.setEmail(adminEmail);
+            admin.setPassword(passwordEncoder.encode("admin123")); // Always reset password
+            admin.setRole("ADMIN");
+            admin.setStatus("APPROVED");
+            admin.setOrganization("SCLMS");
+            admin.setCreatedDate(java.time.LocalDate.now().toString());
 
-                admin.setAccountLocked(false);
-                admin.setLoginAttempts(0);
-                admin.setLockoutUntil(null);
-                admin.setLastFailedLoginAt(null);
+            // Security defaults
+            admin.setAccountLocked(false);
+            admin.setLoginAttempts(0);
+            admin.setForcePasswordReset(false);
+            admin.setTwoFactorEnabled(false);
 
-                admin.setForcePasswordReset(false);
-                admin.setTwoFactorEnabled(false);
-                admin.setTwoFactorSecret(null);
-
-                userRepository.save(admin);
-
-                System.out.println("✅ ADMIN FORCE RESET DONE");
-            });
-
-            // Create admin user
-            if (userRepository.findByEmail("admin@sclms.com").isEmpty()) {
-                User admin = new User();
-                admin.setName("System Administrator");
-                admin.setEmail("admin@sclms.com");
-                admin.setPassword(passwordEncoder.encode("admin123"));
-                admin.setRole("ADMIN");
-                admin.setStatus("APPROVED");
-                admin.setOrganization("SCLMS");
-                admin.setCreatedDate(java.time.LocalDate.now().toString());
-                userRepository.save(admin);
-                System.out.println("✅ Admin user created");
-            }
-
-            // Create approver user
-            if (userRepository.findByEmail("approver@sclms.com").isEmpty()) {
-                User approver = new User();
-                approver.setName("Contract Approver");
-                approver.setEmail("approver@sclms.com");
-                approver.setPassword(passwordEncoder.encode("approver123"));
-                approver.setRole("APPROVER");
-                approver.setStatus("APPROVED");
-                approver.setOrganization("SCLMS");
-                approver.setCreatedDate(java.time.LocalDate.now().toString());
-                userRepository.save(approver);
-                System.out.println("✅ Approver user created");
-            }
-
-            // Create a regular user
-            if (userRepository.findByEmail("user@sclms.com").isEmpty()) {
-                User user = new User();
-                user.setName("Regular User");
-                user.setEmail("user@sclms.com");
-                user.setPassword(passwordEncoder.encode("user123"));
-                user.setRole("USER");
-                user.setStatus("APPROVED");
-                user.setOrganization("TechCorp");
-                user.setCreatedDate(java.time.LocalDate.now().toString());
-                userRepository.save(user);
-                System.out.println("✅ Regular user created");
-            }
-
-            // REMOVED: Auto-update of existing users to APPROVER role
-            // This was overriding manual user approvals through admin panel
-            // Users should be approved manually by admins only
-
-            // Fix existing users' passwords if they are not BCrypt hashed and set defaults
-            List<User> allUsers = userRepository.findAll();
-            for (User user : allUsers) {
-                boolean needsUpdate = false;
-                if (user.getPassword() != null && !user.getPassword().startsWith("$2a$")) {
-                    // Password is not BCrypt hashed, re-hash it
-                    // For default users, use known passwords; for others, log warning
-                    String originalPassword = user.getPassword();
-                    if ("admin@sclms.com".equals(user.getEmail())) {
-                        user.setPassword(passwordEncoder.encode("admin123"));
-                    } else if ("approver@sclms.com".equals(user.getEmail())) {
-                        user.setPassword(passwordEncoder.encode("approver123"));
-                    } else if ("user@sclms.com".equals(user.getEmail())) {
-                        user.setPassword(passwordEncoder.encode("user123"));
-                    } else {
-                        // For manually added users, keep original password but hash it
-                        user.setPassword(passwordEncoder.encode(originalPassword));
-                        System.out.println("⚠️  Re-hashed password for manually added user: " + user.getEmail());
-                    }
-                    needsUpdate = true;
-                }
-                // Set default values for nullable fields that are null
-                if (user.getBrowserNotifications() == null) {
-                    user.setBrowserNotifications(true);
-                    needsUpdate = true;
-                }
-                if (user.getEmailNotifications() == null) {
-                    user.setEmailNotifications(true);
-                    needsUpdate = true;
-                }
-                if (user.getSystemNotifications() == null) {
-                    user.setSystemNotifications(true);
-                    needsUpdate = true;
-                }
-                if (user.getContractAlerts() == null) {
-                    user.setContractAlerts(true);
-                    needsUpdate = true;
-                }
-                if (user.getExpirationReminders() == null) {
-                    user.setExpirationReminders(true);
-                    needsUpdate = true;
-                }
-                if (user.getTwoFactorEnabled() == null) {
-                    user.setTwoFactorEnabled(false);
-                    needsUpdate = true;
-                }
-                if (needsUpdate) {
-                    userRepository.save(user);
-                    System.out.println("✅ Fixed user: " + user.getEmail());
-                }
-            }
-
-            // Create sample contracts if none exist
-            long contractCount = contractRepository.count();
-            System.out.println("Current contract count: " + contractCount);
-            if (contractCount == 0) {
-                createSampleContracts();
-            } else {
-                System.out.println("Sample contracts already exist, skipping creation");
-            }
+            userRepository.save(admin);
+            System.out.println("✅ ADMIN USER SYNCED: " + adminEmail);
 
         } catch (Exception e) {
-            System.err.println("Error creating default users: " + e.getMessage());
+            System.err.println("Error initializing admin user: " + e.getMessage());
         }
     }
 
